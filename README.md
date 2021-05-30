@@ -106,4 +106,9 @@
     Player p = (Player) sender;
     ItemStack item = SkullHelper.getSkullFromURL("https://www.minecraftskins.com/uploads/skins/2021/05/29/-*tippidytoppidy*--17961371.png?v399")
 
- 
+ Finally, if you are trying to recreate an item from a menu, but you don't know the name of the player, the final option is to use it's base64 tag to get the skin. To find this, you can search 'NBT viewer minecraft mod' on Google to get the mod required. Once you have it, and are hovering over a head in a menu, copying the value under the tag "Value" is the base64 id for that skin. You can use this to get the custom head by using:
+
+  Player p = (Player) sender;
+  ItemStack item = SkullHelper.getSkullFromBase64("copy it here");
+
+ That's all!
