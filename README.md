@@ -1,4 +1,5 @@
-Instructions:
+**Instructions:**
+---------------------------------------------------------------------------------
 
   FOR CODE:
     - The code was compiled in eclipse, so this is the easiest option when it comes to editing the code. Simply close your Eclipse, find the eclipse-workspace folder (Usually in
