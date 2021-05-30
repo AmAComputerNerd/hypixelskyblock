@@ -40,6 +40,9 @@ public class MenuClickListener implements Listener {
 		} else if(e.getView().getTitle().equals(ChatUtils.chat(SBMenuGUI.collection_ranking.getTitle()))) {
 			e.setCancelled(true);
 			SBMenuGUI.collection_ranking.clicked(p, slot, i, inv);
+		} else if(e.getView().getTitle().equals(ChatUtils.chat(SBMenuGUI.recipes_main.getTitle()))) {
+			e.setCancelled(true);
+			SBMenuGUI.recipes_main.clicked(p, slot, i, inv);
 		}
 	}
 

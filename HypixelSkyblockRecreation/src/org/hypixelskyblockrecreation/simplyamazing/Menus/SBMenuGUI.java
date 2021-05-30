@@ -122,6 +122,8 @@ public class SBMenuGUI {
 				p.openInventory(Inventories.build(SBMenuGUI.collection_main.getTitle(), 6, SBMenuGUI.collection_main.getInventoryFormat(p)));
 			} else if(i.getItemMeta().getDisplayName().equals(ChatUtils.chat("&c"))) {
 				return;
+			} else if(i.getItemMeta().getDisplayName().equals(ChatUtils.chat("&aRecipe Book"))) {
+				p.openInventory(Inventories.build(SBMenuGUI.recipes_main.getTitle(), 6, SBMenuGUI.recipes_main.getInventoryFormat(p)));
 			} else {
 				p.sendMessage(ChatUtils.chat("&cSorry! This option currently isn't available!"));
 			}
@@ -382,6 +384,72 @@ public class SBMenuGUI {
 				p.closeInventory();
 			} else if(i.getItemMeta().getDisplayName().equals(ChatUtils.chat("&aCollection"))) {
 				p.openInventory(Inventories.build("Collection", 6, SBMenuGUI.collection_main.getInventoryFormat(p)));
+			} else if(i.getItemMeta().getDisplayName().equals(ChatUtils.chat("&c"))) {
+				return;
+			} else {
+				p.sendMessage(ChatUtils.chat("&cSorry! This option currently isn't available!"));
+			}
+		}
+	}
+
+	public static class recipes_main {
+		public static String getTitle() {
+			return "Recipe Book";
+		}
+		
+		public static HashMap<ItemStack, String> drawInventory(HashMap<ItemStack, String> inv, Player p) {
+			// Create the Recipe Book button
+			ItemStack recipeBook = Inventories.buildItem(Material.BOOK, 1, "&aRecipe Book", new ArrayList<String>(ChatUtils.chat(Arrays.asList("&7Through your adventure, you will", "&7unlock recipes for all kinds of", "&7special items! You can view how", "&7to craft these items here.", "", "&7Recipe Book Unlocked: &e0.0&6%", "&f-------------------- &e0&6/&e719"))));
+			inv.put(recipeBook, "4");
+			// Create the Farming recipes button
+			ItemStack farming = Inventories.buildItem(Material.GOLD_HOE, 1, "&aFarming Recipes", new ArrayList<String>(ChatUtils.chat(Arrays.asList("&7View all of the Farming Recipes", "&7that you have unlocked!", "", "&7Recipes Unlocked: &e76.9&6%", "&2----------------&f---- &e113&6/&e147", "", "&eClick to view!"))));
+			inv.put(farming, "20");
+			// Create the Mining recipes button
+			ItemStack mining = Inventories.buildItem(Material.STONE_PICKAXE, 1, "&aMining Recipes", new ArrayList<String>(ChatUtils.chat(Arrays.asList("&7View all of the Mining Recipes", "&7that you have unlocked!", "", "&7Recipes Unlocked: &e76.2&6%", "&2----------------&f---- &e109&6/&e143", "", "&eClick to view!"))));
+			inv.put(mining, "21");
+			// Create the Combat recipes button
+			ItemStack combat = Inventories.buildItem(Material.STONE_SWORD, 1, "&aCombat Recipes", new ArrayList<String>(ChatUtils.chat(Arrays.asList("&7View all of the Combat Recipes", "&7that you have unlocked!", "", "&7Recipes Unlocked: &e86.9&6%", "&2------------------&f-- &e86&6/&e99", "", "&eClick to view!"))));
+			inv.put(combat, "22");
+			// Create the Fishing recipes button
+			ItemStack fishing = Inventories.buildItem(Material.FISHING_ROD, 1, "&aFishing Recipes", new ArrayList<String>(ChatUtils.chat(Arrays.asList("&7View all of the Fishing Recipes", "&7that you have unlocked!", "", "&7Recipes Unlocked: &a100&6%", "&2-------------------- &e79&6/&e79", "", "&eClick to view!"))));
+			inv.put(fishing, "23");
+			// Create the Foraging recipes button
+			ItemStack foraging = Inventories.buildItem(Material.SAPLING, 1, (short)3, "&aForaging Recipes", new ArrayList<String>(ChatUtils.chat(Arrays.asList("&7View all of the Foraging Recipes", "&7that you have unlocked!", "", "&7Recipes Unlocked: &e86.3&6%", "&2------------------&f-- &e44&6/&e51", "", "&eClick to view!"))));
+			inv.put(foraging, "24");
+			// Create the Enchanting recipes button
+			ItemStack enchanting = Inventories.buildItem(Material.ENCHANTMENT_TABLE, 1, "&aEnchanting Recipes", new ArrayList<String>(ChatUtils.chat(Arrays.asList("&7View all of the Enchanting Recipes", "&7that you have unlocked!", "", "&7Recipes Unlocked: &e83.1&6%", "&2-----------------&f--- &e49&6/&e59", "", "&eClick to view!"))));
+			inv.put(enchanting, "29");
+			// Create the Alchemy recipes button
+			ItemStack alchemy = Inventories.buildItem(Material.BREWING_STAND_ITEM, 1, "&aAlchemy Recipes", new ArrayList<String>(ChatUtils.chat(Arrays.asList("&7View all of the Alchemy Recipes", "&7that you have unlocked!", "", "&7Recipes Unlocked: &e86.9&6%", "&2------------------&f-- &e53&6/&e61", "", "&eClick to view!"))));
+			inv.put(alchemy, "30");
+			// Create the Carpentry recipes button
+			ItemStack carpentry = Inventories.buildItem(Material.WORKBENCH, 1, "&aCarpentry Recipes", new ArrayList<String>(ChatUtils.chat(Arrays.asList("&7View all of the Carpentry Recipes", "&7that you have unlocked!", "", "&7Recipes Unlocked: &a100&6%", "&2-------------------- &e1&6/&e1", "", "&eClick to view!"))));
+			inv.put(carpentry, "31");
+			// Create the Slayer recipes button
+			ItemStack slayer = Inventories.buildItem(Material.BOW, 1, "&aSlayer Recipes", new ArrayList<String>(ChatUtils.chat(Arrays.asList("&7View all of the Slayer Recipes", "&7that you have unlocked!", "", "&7Recipes Unlocked: &e93.8&6%", "&2-------------------&f- &e60&6/&e64", "", "&eClick to view!"))));
+			inv.put(slayer, "32");
+			// Create the Special recipes button
+			ItemStack special = Inventories.buildItem(Material.NETHER_STAR, 1, "&aSpecial Recipes", new ArrayList<String>(ChatUtils.chat(Arrays.asList("&7View all of the Special Recipes", "&7that you have unlocked!", "", "&7Recipes Unlocked: &a100&6%", "&2-------------------- &e15&6/&e15", "", "&eClick to view!"))));
+			inv.put(special, "33");
+			// Create the Go Back button
+			ItemStack goBack = Inventories.buildItem(Material.ARROW, 1, "&aGo Back", new ArrayList<String>(ChatUtils.chat(Arrays.asList("&7To SkyBlock Menu"))));
+			inv.put(goBack, "48");
+			// Create the Close button
+			ItemStack close = Inventories.buildItem(Material.BARRIER, 1, "&cClose", new ArrayList<String>());
+			inv.put(close, "49");
+			return inv;
+		}
+		
+		public static HashMap<ItemStack, String> getInventoryFormat(Player p) {
+			HashMap<ItemStack, String> toReturn = drawInventory(new HashMap<ItemStack, String>(), p);
+			return toReturn;
+		}
+		
+		public static void clicked(Player p, int slot, ItemStack i, Inventory inv) {
+			if(i.getItemMeta().getDisplayName().equals(ChatUtils.chat("&aGo Back"))) {
+				p.openInventory(Inventories.build("SkyBlock Menu", 6, SBMenuGUI.main.getInventoryFormat(p)));
+			} else if(i.getItemMeta().getDisplayName().equals(ChatUtils.chat("&cClose"))) {
+				p.closeInventory();
 			} else if(i.getItemMeta().getDisplayName().equals(ChatUtils.chat("&c"))) {
 				return;
 			} else {
