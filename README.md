@@ -16,7 +16,7 @@
   
   ---------------------------------------------------------------------------------
   
-  SETTING UP NEW INVENTORIES
+  **SETTING UP NEW INVENTORIES**
   
   To start making a new inventory, you must make a new file that has the following methods:
   
@@ -66,7 +66,7 @@
 
   ---------------------------------------------------------------------------------
 
-  PERFORMING ACTIONS UPON CLICKING AN ITEM
+  **PERFORMING ACTIONS UPON CLICKING AN ITEM**
 
   To start using this feature, you must first go to the file titled 'MenuClickListener' and add the following line of code to the end of the last else if():
      
@@ -83,5 +83,27 @@
       p.closeInventory();
     }
 
-  And your done! More will be coming soon.
+  And your done!
   
+  ---------------------------------------------------------------------------------
+
+  **USING CUSTOM SKULLS**
+
+  The code has a helper inside that can be used to make custom skulls. There are a multitude of ways to get a custom head, however. The easiest way is to use a player's name to get their head:
+  
+    // This is a valid way to do this, but it is also deprecated.
+    Player p = (Player) sender;
+    ItemStack item = SkullHelper.getSkullFromName(p)
+
+  While this *is* a valid option, this is also a deprecated option. This means that it is no longer supported, and may be buggy - not to mention the fact that it will likely be removed by Spigot in the near future. The next easiest, and non-deprecated way to get a player's head is using their UUID:
+
+    // This is a better way to get a head, and is more reliable
+    Player p = (Player) sender;
+    ItemStack item = SkullHelper.getSkullFromUUID(p.getUniqueId());
+    
+  What about when you want to set a skull to have the texture of a skin you found on minecraftskins.com, however? While you could try to find an account with this skin active, the library also has included an option to use a URL to retrieve a custom head:
+
+    Player p = (Player) sender;
+    ItemStack item = SkullHelper.getSkullFromURL("https://www.minecraftskins.com/uploads/skins/2021/05/29/-*tippidytoppidy*--17961371.png?v399")
+
+ 
