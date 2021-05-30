@@ -47,7 +47,7 @@ Instructions:
     
     public static HashMap<ItemStack, String> getInventoryFormat(Player p) {
       HashMap<ItemStack, String> toReturn = drawInventory(new HashMap<ItemStack, String>(), p);
-			return toReturn;
+      return toReturn;
     }
     
   Finally, the clicked() method is used by the MenuClickListener to decide what actions occur by clicking which button. e.g.
