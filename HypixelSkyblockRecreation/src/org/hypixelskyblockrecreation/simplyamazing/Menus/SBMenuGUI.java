@@ -118,6 +118,8 @@ public class SBMenuGUI {
 		public static void clicked(Player p, int slot, ItemStack i, Inventory inv) {
 			if(i.getItemMeta().getDisplayName().equals(ChatUtils.chat("&aYour Skills"))) {
 				p.openInventory(Inventories.build("Your Skills", 6, SBMenuGUI.skills_main.getInventoryFormat(p)));
+			} else if(i.getItemMeta().getDisplayName().equals(ChatUtils.chat("&aCollection"))) {
+				p.openInventory(Inventories.build(SBMenuGUI.collection_main.getTitle(), 6, SBMenuGUI.collection_main.getInventoryFormat(p)));
 			} else if(i.getItemMeta().getDisplayName().equals(ChatUtils.chat("&c"))) {
 				return;
 			} else {
@@ -268,6 +270,118 @@ public class SBMenuGUI {
 				p.closeInventory();
 			} else if(i.getItemMeta().getDisplayName().equals(ChatUtils.chat("&aYour Skills"))) {
 				p.openInventory(Inventories.build("Your Skills", 6, SBMenuGUI.skills_main.getInventoryFormat(p)));
+			} else if(i.getItemMeta().getDisplayName().equals(ChatUtils.chat("&c"))) {
+				return;
+			} else {
+				p.sendMessage(ChatUtils.chat("&cSorry! This option currently isn't available!"));
+			}
+		}
+	}
+
+	public static class collection_main {
+		public static String getTitle() {
+			return "Collection";
+		}
+		
+		public static HashMap<ItemStack, String> drawInventory(HashMap<ItemStack, String> inv, Player p) {
+			// Create the Collection button
+			ItemStack collection = Inventories.buildItem(Material.ITEM_FRAME, 1, "&aCollection", new ArrayList<String>(ChatUtils.chat(Arrays.asList("&7View all of the items available", "&7in SkyBlock. Collect more of an", "&7item to unlock rewards on your", "&7on your way to becoming a master of", "&7SkyBlock!", "", "&7Collection Maxed Out: &e0.0&6%", "&f-------------------- &e0&6/&e60", "", "&eClick to show rankings!"))));
+			inv.put(collection, "4");
+			// Create the Farming collection button
+			ItemStack farming = Inventories.buildItem(Material.GOLD_HOE, 1, "&aFarming Collection", new ArrayList<String>(ChatUtils.chat(Arrays.asList("&7View your Farming Collection!", "", "&7Collection Maxed Out: &e23.5&6%", "&2-----&f--------------- &e4&6/&e17", "", "&eClick to view!"))));
+			inv.put(farming, "20");
+			// Create the Mining collection button
+			ItemStack mining = Inventories.buildItem(Material.STONE_PICKAXE, 1, "&aMining Collection", new ArrayList<String>(ChatUtils.chat(Arrays.asList("&7View your Mining Collection!", "", "&7Collection Maxed Out: &e52.9&6%", "&2-----------&f--------- &e9&6/&e17", "", "&eClick to view!"))));
+			inv.put(mining, "21");
+			// Create the Combat collection button
+			ItemStack combat = Inventories.buildItem(Material.STONE_SWORD, 1, "&aCombat Collection", new ArrayList<String>(ChatUtils.chat(Arrays.asList("&7View your Combat Collection!", "", "&7Collection Maxed Out: &e40&6%", "&2--------&f------------ &e4&6/&e10", "", "&eClick to view!"))));
+			inv.put(combat, "22");
+			// Create the Foraging collection button
+			ItemStack foraging = Inventories.buildItem(Material.SAPLING, 1, (short)3, "&aForaging Collection", new ArrayList<String>(ChatUtils.chat(Arrays.asList("&7View your Foraging Collection!", "", "&7Collection Maxed Out: &e33.3&6%", "&2-------&f------------- &e2&6/&e6", "", "&eClick to view!"))));
+			inv.put(foraging, "23");
+			// Create the Fishing collection button
+			ItemStack fishing = Inventories.buildItem(Material.FISHING_ROD, 1, "&aFishing Collection", new ArrayList<String>(ChatUtils.chat(Arrays.asList("&7View your Fishing Collection!", "", "&7Collection Maxed Out: &e100&6%", "&2-------------------- &e10&6/&e10", "", "&eClick to view!"))));
+			inv.put(fishing, "24");
+			// Create the Boss collection button
+			ItemStack boss = Inventories.buildItem(Material.SKULL_ITEM, 1, (short)1, "&5Boss Collection", new ArrayList<String>(ChatUtils.chat(Arrays.asList("&7View your progress and claim", "&7rewards you have obtained from", "&7defeating SkyBlock bosses!", "", "&7Boss Collection Maxed Out: &e0&6%", "&f-------------------- &e0&6/&e7", "", "&eClick to view!"))));
+			inv.put(boss, "31");
+			// Create the Go Back button
+			ItemStack goBack = Inventories.buildItem(Material.ARROW, 1, "&aGo Back", new ArrayList<String>(ChatUtils.chat(Arrays.asList("&7To SkyBlock Menu"))));
+			inv.put(goBack, "48");
+			// Create the Close button
+			ItemStack close = Inventories.buildItem(Material.BARRIER, 1, "&cClose", new ArrayList<String>());
+			inv.put(close, "49");
+			return inv;
+		}
+		
+		public static HashMap<ItemStack, String> getInventoryFormat(Player p) {
+			HashMap<ItemStack, String> toReturn = drawInventory(new HashMap<ItemStack, String>(), p);
+			return toReturn;
+		}
+		
+		public static void clicked(Player p, int slot, ItemStack i, Inventory inv) {
+			if(i.getItemMeta().getDisplayName().equals(ChatUtils.chat("&aGo Back"))) {
+				p.openInventory(Inventories.build("SkyBlock Menu", 6, SBMenuGUI.main.getInventoryFormat(p)));
+			} else if(i.getItemMeta().getDisplayName().equals(ChatUtils.chat("&cClose"))) {
+				p.closeInventory();
+			} else if(i.getItemMeta().getDisplayName().equals(ChatUtils.chat("&aCollection"))) {
+				p.openInventory(Inventories.build("Collection > Ranking", 6, SBMenuGUI.collection_ranking.getInventoryFormat(p)));
+			} else if(i.getItemMeta().getDisplayName().equals(ChatUtils.chat("&c"))) {
+				return;
+			} else {
+				p.sendMessage(ChatUtils.chat("&cSorry! This option currently isn't available!"));
+			}
+		}
+	}
+	
+	public static class collection_ranking {
+		public static String getTitle() {
+			return "Collection > Ranking";
+		}
+		
+		public static HashMap<ItemStack, String> drawInventory(HashMap<ItemStack, String> inv, Player p) {
+			// Create the Collection button
+			ItemStack collection = Inventories.buildItem(Material.ITEM_FRAME, 1, "&aCollection", new ArrayList<String>(ChatUtils.chat(Arrays.asList("&7View all of the items available", "&7in SkyBlock. Collect more of an", "&7item to unlock rewards on your", "&7on your way to becoming a master of", "&7SkyBlock!", "", "&7Collection Maxed Out: &e0.0&6%", "&f-------------------- &e0&6/&e60", "", "&eClick to hide rankings!"))));
+			inv.put(collection, "4");
+			// Create the Farming collection button
+			ItemStack farming = Inventories.buildItem(Material.GOLD_HOE, 1, "&aFarming Collection", new ArrayList<String>(ChatUtils.chat(Arrays.asList("&7View your Farming Collection!", "", "&7Collection Maxed Out: &e23.5&6%", "&2-----&f--------------- &e4&6/&e17", "", "&eClick to view!"))));
+			inv.put(Inventories.glowify(farming), "20");
+			// Create the Mining collection button
+			ItemStack mining = Inventories.buildItem(Material.STONE_PICKAXE, 1, "&aMining Collection", new ArrayList<String>(ChatUtils.chat(Arrays.asList("&7View your Mining Collection!", "", "&7Collection Maxed Out: &e52.9&6%", "&2-----------&f--------- &e9&6/&e17", "", "&eClick to view!"))));
+			inv.put(Inventories.glowify(mining), "21");
+			// Create the Combat collection button
+			ItemStack combat = Inventories.buildItem(Material.STONE_SWORD, 1, "&aCombat Collection", new ArrayList<String>(ChatUtils.chat(Arrays.asList("&7View your Combat Collection!", "", "&7Collection Maxed Out: &e40&6%", "&2--------&f------------ &e4&6/&e10", "", "&eClick to view!"))));
+			inv.put(Inventories.glowify(combat), "22");
+			// Create the Foraging collection button
+			ItemStack foraging = Inventories.buildItem(Material.SAPLING, 1, (short)3, "&aForaging Collection", new ArrayList<String>(ChatUtils.chat(Arrays.asList("&7View your Foraging Collection!", "", "&7Collection Maxed Out: &e33.3&6%", "&2-------&f------------- &e2&6/&e6", "", "&eClick to view!"))));
+			inv.put(Inventories.glowify(foraging), "23");
+			// Create the Fishing collection button
+			ItemStack fishing = Inventories.buildItem(Material.FISHING_ROD, 1, "&aFishing Collection", new ArrayList<String>(ChatUtils.chat(Arrays.asList("&7View your Fishing Collection!", "", "&7Collection Maxed Out: &e100&6%", "&2-------------------- &e10&6/&e10", "", "&eClick to view!"))));
+			inv.put(Inventories.glowify(fishing), "24");
+			// Create the Boss collection button
+			ItemStack boss = Inventories.buildItem(Material.SKULL_ITEM, 1, (short)1, "&5Boss Collection", new ArrayList<String>(ChatUtils.chat(Arrays.asList("&7View your progress and claim", "&7rewards you have obtained from", "&7defeating SkyBlock bosses!", "", "&7Boss Collection Maxed Out: &e0&6%", "&f-------------------- &e0&6/&e7", "", "&eClick to view!"))));
+			inv.put(Inventories.glowify(boss), "31");
+			// Create the Go Back button
+			ItemStack goBack = Inventories.buildItem(Material.ARROW, 1, "&aGo Back", new ArrayList<String>(ChatUtils.chat(Arrays.asList("&7To SkyBlock Menu"))));
+			inv.put(goBack, "48");
+			// Create the Close button
+			ItemStack close = Inventories.buildItem(Material.BARRIER, 1, "&cClose", new ArrayList<String>());
+			inv.put(close, "49");
+			return inv;
+		}
+		
+		public static HashMap<ItemStack, String> getInventoryFormat(Player p) {
+			HashMap<ItemStack, String> toReturn = drawInventory(new HashMap<ItemStack, String>(), p);
+			return toReturn;
+		}
+		
+		public static void clicked(Player p, int slot, ItemStack i, Inventory inv) {
+			if(i.getItemMeta().getDisplayName().equals(ChatUtils.chat("&aGo Back"))) {
+				p.openInventory(Inventories.build("SkyBlock Menu", 6, SBMenuGUI.main.getInventoryFormat(p)));
+			} else if(i.getItemMeta().getDisplayName().equals(ChatUtils.chat("&cClose"))) {
+				p.closeInventory();
+			} else if(i.getItemMeta().getDisplayName().equals(ChatUtils.chat("&aCollection"))) {
+				p.openInventory(Inventories.build("Collection", 6, SBMenuGUI.collection_main.getInventoryFormat(p)));
 			} else if(i.getItemMeta().getDisplayName().equals(ChatUtils.chat("&c"))) {
 				return;
 			} else {
