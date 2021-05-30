@@ -1,0 +1,10 @@
+name: HypixelSkyblock
+version: 0.1
+author: SimplyAmazing
+main: org.hypixelskyblockrecreation.simplyamazing.Main
+description: An attempt at a Hypixel SkyBlock recreation.
+
+commands:
+   skyblockmenu:
+      aliases: [sbm]
+      description: Opens the SkyBlock menu!
