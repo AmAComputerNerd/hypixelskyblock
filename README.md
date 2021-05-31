@@ -93,9 +93,9 @@
   
     // This is a valid way to do this, but it is also deprecated.
     Player p = (Player) sender;
-    ItemStack item = SkullHelper.getSkullFromName(p)
+    ItemStack item = SkullHelper.getSkullFromName(p.getName());
 
-  While this *is* a valid option, this is also a deprecated option. This means that it is no longer supported, and may be buggy - not to mention the fact that it will likely be removed by Spigot in the near future. The next easiest, and non-deprecated way to get a player's head is using their UUID:
+  While this *is* a valid option, this is also a deprecated option. This means that it is no longer supported, and may be buggy - not to mention the fact that the method used to get a skull by name will likely be removed by Spigot in the near future. The next easiest, and non-deprecated way to get a player's head is using their UUID:
 
     // This is a better way to get a head, and is more reliable
     Player p = (Player) sender;
@@ -108,7 +108,7 @@
 
  Finally, if you are trying to recreate an item from a menu, but you don't know the name of the player, the final option is to use it's base64 tag to get the skin. To find this, you can search 'NBT viewer minecraft mod' on Google to get the mod required. Once you have it, and are hovering over a head in a menu, copying the value under the tag "Value" is the base64 id for that skin. You can use this to get the custom head by using:
 
-  Player p = (Player) sender;
-  ItemStack item = SkullHelper.getSkullFromBase64("copy it here");
+    Player p = (Player) sender;
+    ItemStack item = SkullHelper.getSkullFromBase64("copy it here");
 
  That's all!
