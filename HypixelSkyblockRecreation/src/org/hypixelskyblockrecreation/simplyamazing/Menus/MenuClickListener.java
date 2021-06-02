@@ -28,6 +28,9 @@ public class MenuClickListener implements Listener {
 		if(e.getView().getTitle().equals(ChatUtils.chat(SBMenuGUI.main.getTitle()))) {
 			e.setCancelled(true);
 			SBMenuGUI.main.clicked(p, slot, i, inv);
+		} else if(e.getView().getTitle().equals(ChatUtils.chat(SBMenuGUI.profile.getTitle()))) {
+			e.setCancelled(true);
+			SBMenuGUI.profile.clicked(p, slot, i, inv);
 		} else if(e.getView().getTitle().equals(ChatUtils.chat(SBMenuGUI.skills_main.getTitle()))) {
 			e.setCancelled(true);
 			SBMenuGUI.skills_main.clicked(p, slot, i, inv);

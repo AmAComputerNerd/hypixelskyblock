@@ -8,3 +8,5 @@ commands:
    skyblockmenu:
       aliases: [sbm]
       description: Opens the SkyBlock menu!
+   gimme:
+      description: Gives the SB Menu item!

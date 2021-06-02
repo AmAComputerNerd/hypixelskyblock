@@ -7,5 +7,6 @@
 	</classpathentry>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="lib" path="D:/Minecraft/Resources/plugindev/libs/1.12x/spigot-1.12.2.jar"/>
+	<classpathentry kind="lib" path="D:/Minecraft/Resources/plugindev/dependencies/item-nbt-api-plugin-2.7.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

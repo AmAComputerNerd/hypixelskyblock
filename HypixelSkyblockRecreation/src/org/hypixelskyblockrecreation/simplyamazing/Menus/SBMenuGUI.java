@@ -25,14 +25,35 @@ public class SBMenuGUI {
 		this.plugin = plugin;
 	}
 	
+	/*   SKILL SYMBOLS
+	 * Damage: &c❁
+	 * Health: &c❤
+	 * Defense: &a❈
+	 * Strength: &c❁
+	 * Speed: &f✦
+	 * Crit Chance: &9☣
+	 * Crit Damage: &9☠
+	 * Intelligence: &b✎
+	 * Mining Speed: &6⸕
+	 * Sea Creature Chance: &3α
+	 * Magic Find: &b✯
+	 * Pet Luck: &d♣
+	 * True Defense: &f❂
+	 * Ferocity: &c⫽
+	 * Ability Damage: &c๑
+	 * Mining Fortune: &6☘
+	 * Farming Fortune: &6☘
+	 * Foraging Fortune: &6☘
+	*/
+	
 	public static class main {
 		public static String getTitle() {
 			return "SkyBlock Menu";
 		}
 		
-		public static HashMap<ItemStack, String> drawInventory(HashMap<ItemStack, String> inv, Player p) {
+		private static HashMap<ItemStack, String> drawInventory(HashMap<ItemStack, String> inv, Player p) {
 			// Create the player head
-			ItemStack skyblockProfile = Inventories.buildItem(SkullHelper.getSkullFromUUID(p.getUniqueId()), "&aYour SkyBlock Profile", ChatUtils.chat(new ArrayList<String>(Arrays.asList("", " &c&l❤&r&c Health &f100 HP", " &a&l❈&r&a Defence &f0", " &c&l❁&r &cStrength &f0", " &f&l✦ &r&fSpeed 100", " &9&l☣ &r&9Crit Chance &f20%", " &9&l☠ &r&9Crit Damage &f0%", "", "&eClick to view your profile!"))));
+			ItemStack skyblockProfile = Inventories.buildItem(SkullHelper.getSkullFromUUID(p.getUniqueId()), "&aYour SkyBlock Profile", ChatUtils.chat(new ArrayList<String>(Arrays.asList(" &c❤ Health &f100 HP", " &a❈ Defence &f0", " &c❁ &cStrength &f0", " &f✦ Speed 100", " &9☣ Crit Chance &f20%", " &9☠ Crit Damage &f0%", " &b✎ Intelligence &f100", " &6⸕ Mining Speed &f0", " &3α Sea Creature Chance &f0%", " &b✯ Magic Find &f0", " &d♣ Pet Luck &f0", " &f❂ True Defence 0", " &c⫽ Ferocity &f0", " &c๑ Ability Damage &f0", " &6☘ Mining Fortune &f0", " &6☘ Farming Fortune &f0", " &6☘ Foraging Fortune &f0", "", "&eClick to view your profile!"))));
 			inv.put(skyblockProfile, "13");
 			// Create the skills button
 			ItemStack skills = Inventories.buildItem(Material.DIAMOND_SWORD, 1, "&aYour Skills", new ArrayList<String>(ChatUtils.chat(Arrays.asList("&7View your Skill progression and", "&7rewards.", "", "&60 Skill Avg. &8(non-cosmetic)", "", "&eClick to show skills!"))));
@@ -116,26 +137,81 @@ public class SBMenuGUI {
 		}
 		
 		public static void clicked(Player p, int slot, ItemStack i, Inventory inv) {
+			if(i.getItemMeta() == null) {
+				// Fix random, NullPointerExceptions' being thrown to CONSOLE.
+				return;
+			}
+			if(i.getItemMeta().getDisplayName() == null) {
+				// Fix NullPointerExceptions' being thrown to CONSOLE when dropping an item with no display name.
+				return;
+			}
 			if(i.getItemMeta().getDisplayName().equals(ChatUtils.chat("&aYour Skills"))) {
-				p.openInventory(Inventories.build("Your Skills", 6, SBMenuGUI.skills_main.getInventoryFormat(p)));
+				p.openInventory(Inventories.build(SBMenuGUI.skills_main.getTitle(), 6, SBMenuGUI.skills_main.getInventoryFormat(p)));
 			} else if(i.getItemMeta().getDisplayName().equals(ChatUtils.chat("&aCollection"))) {
 				p.openInventory(Inventories.build(SBMenuGUI.collection_main.getTitle(), 6, SBMenuGUI.collection_main.getInventoryFormat(p)));
 			} else if(i.getItemMeta().getDisplayName().equals(ChatUtils.chat("&c"))) {
 				return;
 			} else if(i.getItemMeta().getDisplayName().equals(ChatUtils.chat("&aRecipe Book"))) {
 				p.openInventory(Inventories.build(SBMenuGUI.recipes_main.getTitle(), 6, SBMenuGUI.recipes_main.getInventoryFormat(p)));
+			} else if(i.getItemMeta().getDisplayName().equals(ChatUtils.chat("&aYour SkyBlock Profile"))) {
+				p.openInventory(Inventories.build(SBMenuGUI.profile.getTitle(), 6, SBMenuGUI.profile.getInventoryFormat(p)));
 			} else {
 				p.sendMessage(ChatUtils.chat("&cSorry! This option currently isn't available!"));
 			}
 		}
 	}
 
+	public static class profile {
+		public static String getTitle() {
+			return "Your SkyBlock Profile";
+		}
+		
+		private static HashMap<ItemStack, String> drawInventory(HashMap<ItemStack, String> inv, Player p) {
+			// Create the Your SkyBlock Profile button
+			ItemStack skyblockProfile = Inventories.buildItem(SkullHelper.getSkullFromUUID(p.getUniqueId()), "&aYour SkyBlock Profile", ChatUtils.chat(new ArrayList<String>(Arrays.asList(" &c❤ Health &f100 HP", " &a❈ Defence &f0", " &c❁ &cStrength &f0", " &f✦ Speed 100", " &9☣ Crit Chance &f20%", " &9☠ Crit Damage &f0%", " &b✎ Intelligence &f100", " &6⸕ Mining Speed &f0", " &3α Sea Creature Chance &f0%", " &b✯ Magic Find &f0", " &d♣ Pet Luck &f0", " &f❂ True Defence 0", " &c⫽ Ferocity &f0", " &c๑ Ability Damage &f0", " &6☘ Mining Fortune &f0", " &6☘ Farming Fortune &f0", " &6☘ Foraging Fortune &f0"))));
+			inv.put(skyblockProfile, "4");
+			// Create the Health button
+			ItemStack health = Inventories.buildItem(Material.GOLDEN_APPLE, 1, "&c❤ Health &f100 HP", new ArrayList<String>(ChatUtils.chat(Arrays.asList("&7Health is your total maximum", "&7health. Your natural", "&7regeneration gives &a10 HP", "&7every &a2s.", "", "&7Base Health: &a100 HP", " &8&oIncrease your base Health by", " &8&olevelling your Farming and", " &8&oFishing skills and contributing", " &8&oto the &r&dFairy &8&oin the", " &2Wilderness&8&o.", "", "&7Bonus Health: &8+&e0 HP", " &8&oIncrease your bonus Health", " &8&oby equipping items and armor,", " &8&oand storing accessories in your", " &8&oinventory."))));
+			inv.put(health, "19");
+			// Create the Defense button
+			ItemStack defense = Inventories.buildItem(Material.IRON_CHESTPLATE, 1, "&a❈ Defence &f0", new ArrayList<String>(ChatUtils.chat(Arrays.asList("&7Defense reduces the damage that", "&7you take from enemies.", "", "&7Base Defense: &a0", " &8&oIncrease your base Defense", " &8&oby levelling your Mining Skill", " &8&oand contributing to the &dFairy", " &8&oin the &2Wilderness&8&o.", "", "&7Bonus Defense: &8+&e0", " &8&oIncrease your bonus Defense", " &8&oby equipping items and armor,", " &8&oand storing accessories in your", " &8&oinventory."))));
+			inv.put(defense, "20");
+			// Create the Strength button
+			ItemStack strength = Inventories.buildItem(Material.BLAZE_POWDER, 1, "&c❁ Strength &f0", new ArrayList<String>(ChatUtils.chat(Arrays.asList("&7Health is your total maximum", "&7health. Your natural", "&7regeneration gives &a10 HP", "&7every &a2s.", "", "&7Base Health: &a100 HP", " &8&oIncrease your base Health by", " &8&olevelling your Farming and", " &8&oFishing skills and contributing", " &8&oto the &r&dFairy &8&oin the", " &2Wilderness&8&o.", "", "&7Bonus Health: &8+&e0 HP", " &8&oIncrease your bonus Health", " &8&oby equipping items and armor,", " &8&oand storing accessories in your", " &8&oinventory."))));
+			inv.put(strength, "21");
+			// Create the Speed button
+			ItemStack speed = Inventories.buildItem(Material.SUGAR, 1, "&f✦ Speed &f100", new ArrayList<String>(ChatUtils.chat(Arrays.asList("&7Health is your total maximum", "&7health. Your natural", "&7regeneration gives &a10 HP", "&7every &a2s.", "", "&7Base Health: &a100 HP", " &8&oIncrease your base Health by", " &8&olevelling your Farming and", " &8&oFishing skills and contributing", " &8&oto the &r&dFairy &8&oin the", " &2Wilderness&8&o.", "", "&7Bonus Health: &8+&e0 HP", " &8&oIncrease your bonus Health", " &8&oby equipping items and armor,", " &8&oand storing accessories in your", " &8&oinventory."))));
+			inv.put(speed, "22");
+			// Create the Crit Chance button
+			ItemStack critchanceskull = SkullHelper.getSkullFromBase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvM2U0ZjQ5NTM1YTI3NmFhY2M0ZGM4NDEzM2JmZTgxYmU1ZjJhNDc5OWE0YzA0ZDlhNGRkYjcyZDgxOWVjMmIyYiJ9fX0=");
+			ItemStack critchance = Inventories.buildItem(critchanceskull, "&9☣ Crit Chance &f20%", new ArrayList<String>(ChatUtils.chat(Arrays.asList("&7Health is your total maximum", "&7health. Your natural", "&7regeneration gives &a10 HP", "&7every &a2s.", "", "&7Base Health: &a100 HP", " &8&oIncrease your base Health by", " &8&olevelling your Farming and", " &8&oFishing skills and contributing", " &8&oto the &r&dFairy &8&oin the", " &2Wilderness&8&o.", "", "&7Bonus Health: &8+&e0 HP", " &8&oIncrease your bonus Health", " &8&oby equipping items and armor,", " &8&oand storing accessories in your", " &8&oinventory."))));
+			inv.put(critchance, "23");
+			// Create the Crit Damage button
+			ItemStack critdamageskull = SkullHelper.getSkullFromBase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZGRhZmIyM2VmYzU3ZjI1MTg3OGU1MzI4ZDExY2IwZWVmODdiNzljODdiMjU0YTdlYzcyMjk2ZjkzNjNlZjdjIn19fQ==");
+			ItemStack critdamage = Inventories.buildItem(critdamageskull, "&9☠ Crit Damage &f0%", new ArrayList<String>(ChatUtils.chat(Arrays.asList("&7Health is your total maximum", "&7health. Your natural", "&7regeneration gives &a10 HP", "&7every &a2s.", "", "&7Base Health: &a100 HP", " &8&oIncrease your base Health by", " &8&olevelling your Farming and", " &8&oFishing skills and contributing", " &8&oto the &r&dFairy &8&oin the", " &2Wilderness&8&o.", "", "&7Bonus Health: &8+&e0 HP", " &8&oIncrease your bonus Health", " &8&oby equipping items and armor,", " &8&oand storing accessories in your", " &8&oinventory."))));
+			inv.put(critdamage, "24");
+			// Create the Intelligence button
+			ItemStack intelligence = Inventories.buildItem(Material.ENCHANTED_BOOK, 1, "&b✎ Intelligence &f100", new ArrayList<String>(ChatUtils.chat(Arrays.asList("&7Health is your total maximum", "&7health. Your natural", "&7regeneration gives &a10 HP", "&7every &a2s.", "", "&7Base Health: &a100 HP", " &8&oIncrease your base Health by", " &8&olevelling your Farming and", " &8&oFishing skills and contributing", " &8&oto the &r&dFairy &8&oin the", " &2Wilderness&8&o.", "", "&7Bonus Health: &8+&e0 HP", " &8&oIncrease your bonus Health", " &8&oby equipping items and armor,", " &8&oand storing accessories in your", " &8&oinventory."))));
+			inv.put(intelligence, "25");
+			return inv;
+		}
+		
+		public static HashMap<ItemStack, String> getInventoryFormat(Player p) {
+			HashMap<ItemStack, String> toReturn = drawInventory(new HashMap<ItemStack, String>(), p);
+			return toReturn;
+		}
+		
+		public static void clicked(Player p, int slot, ItemStack i, Inventory inv) {
+			
+		}
+	}
+	
 	public static class skills_main {
 		public static String getTitle() {
 			return "Your Skills";
 		}
 		
-		public static HashMap<ItemStack, String> drawInventory(HashMap<ItemStack, String> inv, Player p) {
+		private static HashMap<ItemStack, String> drawInventory(HashMap<ItemStack, String> inv, Player p) {
 			// Create the Your Skills ranking toggle button
 			ItemStack skills = Inventories.buildItem(Material.DIAMOND_SWORD, 1, "&aYour Skills", new ArrayList<String>(ChatUtils.chat(Arrays.asList("&7View your Skill progression and", "&7rewards.", "", "&60 Skill Avg. &8(non-cosmetic)", "", "&eClick to show rankings!"))));
 			inv.put(skills, "4");
@@ -210,7 +286,7 @@ public class SBMenuGUI {
 			return "Your Skills > Ranking";
 		}
 		
-		public static HashMap<ItemStack, String> drawInventory(HashMap<ItemStack, String> inv, Player p) {
+		private static HashMap<ItemStack, String> drawInventory(HashMap<ItemStack, String> inv, Player p) {
 			// Create the Your Skills ranking toggle button
 			ItemStack skills = Inventories.buildItem(Material.DIAMOND_SWORD, 1, "&aYour Skills", new ArrayList<String>(ChatUtils.chat(Arrays.asList("&7View your Skill progression and", "&7rewards.", "", "&60 Skill Avg. &8(non-cosmetic)", "", "&eClick to hide rankings!"))));
 			inv.put(Inventories.glowify(skills), "4");
@@ -285,7 +361,7 @@ public class SBMenuGUI {
 			return "Collection";
 		}
 		
-		public static HashMap<ItemStack, String> drawInventory(HashMap<ItemStack, String> inv, Player p) {
+		private static HashMap<ItemStack, String> drawInventory(HashMap<ItemStack, String> inv, Player p) {
 			// Create the Collection button
 			ItemStack collection = Inventories.buildItem(Material.ITEM_FRAME, 1, "&aCollection", new ArrayList<String>(ChatUtils.chat(Arrays.asList("&7View all of the items available", "&7in SkyBlock. Collect more of an", "&7item to unlock rewards on your", "&7on your way to becoming a master of", "&7SkyBlock!", "", "&7Collection Maxed Out: &e0.0&6%", "&f-------------------- &e0&6/&e60", "", "&eClick to show rankings!"))));
 			inv.put(collection, "4");
@@ -341,7 +417,7 @@ public class SBMenuGUI {
 			return "Collection > Ranking";
 		}
 		
-		public static HashMap<ItemStack, String> drawInventory(HashMap<ItemStack, String> inv, Player p) {
+		private static HashMap<ItemStack, String> drawInventory(HashMap<ItemStack, String> inv, Player p) {
 			// Create the Collection button
 			ItemStack collection = Inventories.buildItem(Material.ITEM_FRAME, 1, "&aCollection", new ArrayList<String>(ChatUtils.chat(Arrays.asList("&7View all of the items available", "&7in SkyBlock. Collect more of an", "&7item to unlock rewards on your", "&7on your way to becoming a master of", "&7SkyBlock!", "", "&7Collection Maxed Out: &e0.0&6%", "&f-------------------- &e0&6/&e60", "", "&eClick to hide rankings!"))));
 			inv.put(collection, "4");
@@ -397,7 +473,7 @@ public class SBMenuGUI {
 			return "Recipe Book";
 		}
 		
-		public static HashMap<ItemStack, String> drawInventory(HashMap<ItemStack, String> inv, Player p) {
+		private static HashMap<ItemStack, String> drawInventory(HashMap<ItemStack, String> inv, Player p) {
 			// Create the Recipe Book button
 			ItemStack recipeBook = Inventories.buildItem(Material.BOOK, 1, "&aRecipe Book", new ArrayList<String>(ChatUtils.chat(Arrays.asList("&7Through your adventure, you will", "&7unlock recipes for all kinds of", "&7special items! You can view how", "&7to craft these items here.", "", "&7Recipe Book Unlocked: &e0.0&6%", "&f-------------------- &e0&6/&e719"))));
 			inv.put(recipeBook, "4");
@@ -457,4 +533,5 @@ public class SBMenuGUI {
 			}
 		}
 	}
+	
 }
