@@ -7,6 +7,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.hypixelskyblockrecreation.simplyamazing.Main;
 import org.hypixelskyblockrecreation.simplyamazing.Helpers.ChatUtils;
 import org.hypixelskyblockrecreation.simplyamazing.Helpers.ItemHelper;
 
@@ -31,6 +32,7 @@ public class SkyBlockMaterial {
 		this.enchantGlint = enchantGlint;
 		this.isVanillaCraftable = isVanillaCraftable;
 		this.craftingRecipe = craftingRecipe;
+		Main.getInstance().getLogger().info("   -> Loaded a material with an id of '" + String.valueOf(this.uuid) + "' - named '" + this.name + "'.");
 	}
 	
 	public boolean compare(final ItemStack other) {

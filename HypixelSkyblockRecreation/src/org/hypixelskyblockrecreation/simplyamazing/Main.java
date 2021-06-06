@@ -13,7 +13,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 import org.hypixelskyblockrecreation.simplyamazing.Main;
-import org.hypixelskyblockrecreation.simplyamazing.Commands.GimmeSkyBlockMenu;
+import org.hypixelskyblockrecreation.simplyamazing.Commands.Item;
 import org.hypixelskyblockrecreation.simplyamazing.Commands.SkyBlockMenu;
 import org.hypixelskyblockrecreation.simplyamazing.Helpers.AbilityInit;
 import org.hypixelskyblockrecreation.simplyamazing.Helpers.ChatUtils;
@@ -43,9 +43,9 @@ public class Main extends JavaPlugin {
 		inst = this;
 		try {
 			NBTInjector.inject();
+			new Item(this);
 			new SkyBlockMenu(this);
 			new MenuClickListener(this);
-			new GimmeSkyBlockMenu(this);
 			new AbilityInit(this);
 			// Put new items
 			putItem("null", new not_found(Material.BARRIER, "null", "&cERROR: SkyBlockItem not found!", Rarity.NONE, Type.NONE, false, false, new ArrayList<SBAbility>(), null));
@@ -104,6 +104,13 @@ public class Main extends JavaPlugin {
 		return i;
 	}
 	
+	public static boolean isValidItem(final String key) {
+		if(Main.items.containsKey(key)) {
+			return true;
+		}
+		return false;
+	}
+	
 	public static Collection<SkyBlockItem> getItems() {
 		return Main.items.values();
 	}
@@ -126,6 +133,13 @@ public class Main extends JavaPlugin {
 			return null;
 		}
 		return m;
+	}
+	
+	public static boolean isValidMaterial(final String key) {
+		if(Main.materials.containsKey(key)) {
+			return true;
+		}
+		return false;
 	}
 	
 	public static Collection<SkyBlockMaterial> getMaterials() {

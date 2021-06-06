@@ -15,34 +15,20 @@ public class SBAbility {
 	private String name;
 	private String description;
 	private AbilityType type;
-	private Method ability;
 	private int cooldown;
 	
-	public SBAbility(final String name, final Method ability, final AbilityType type, final String description) {
+	public SBAbility(final String name, final AbilityType type, final String description) {
 		this.cooldown = 0;
 		this.name = name;
-		ability.setAccessible(true);
-		this.ability = ability;
 		this.type = type;
 		this.description = description;
 	}
 	
-	public SBAbility(final String name, final Method ability, final AbilityType type, final int cooldown, final String description) {
+	public SBAbility(final String name, final AbilityType type, final int cooldown, final String description) {
 		this.name = name;
-		ability.setAccessible(true);
-		this.ability = ability;
 		this.type = type;
 		this.cooldown = cooldown;
 		this.description = description;
-	}
-	
-	public void invoke(Player p) {
-		this.ability.setAccessible(true);
-		try {
-			this.ability.invoke(this, p);
-		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-			Main.getInstance().getLogger().severe("An item's ability could not be invoked!");
-		}
 	}
 	
 	public List<String> toLore(boolean noShow) {

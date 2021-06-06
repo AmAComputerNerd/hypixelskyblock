@@ -1,14 +1,17 @@
 package org.hypixelskyblockrecreation.simplyamazing.Helpers;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import org.apache.logging.log4j.core.util.Integers;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -120,7 +123,99 @@ public class ItemHelper {
             lines.add(ChatUtils.chat("" + colour + (Object)currentLine));
         }
         
-        return lines;
+        return ChatUtils.chat(lines);
+	}
+	
+	public static HashMap<EntityType, Integer> getItemEntityResistance(ItemStack i) {
+		HashMap<EntityType, Integer> toReturn = new HashMap<EntityType, Integer>();
+		if(i == null) {
+			return toReturn;
+		}
+		if(i.getType().equals(Material.AIR)) {
+			return toReturn;
+		}
+		NBTItem nbti = new NBTItem(i);
+		String value = getNBTValue(i, "EntityResistance");
+		if(value == null) {
+			return toReturn;
+		}
+		List<String> unprocessed = new ArrayList<String>();
+		if(value.contains(", ")) {
+			for(String s : value.split(", ")) {
+				unprocessed.add(s);
+			}
+		} else {
+			unprocessed.add(value);
+		}
+		for(String s : unprocessed) {
+			String[] split = s.split("-");
+			EntityType p0 = matchEntityType(split[0]);
+			int p1 = Utilities.percentageToNumber(split[1]);
+			toReturn.put(p0, p1);
+		}
+		return toReturn;
+	}
+	
+	private static EntityType matchEntityType(String s) {
+		switch(s.toLowerCase()) {
+			case "blaze":
+				return EntityType.BLAZE;
+			case "cave_spider":
+				return EntityType.CAVE_SPIDER;
+			case "creeper":
+				return EntityType.CREEPER;
+			case "elder_guardian":
+				return EntityType.ELDER_GUARDIAN;
+			case "ender_dragon":
+				return EntityType.ENDER_DRAGON;
+			case "enderman":
+				return EntityType.ENDERMAN;
+			case "endermite":
+				return EntityType.ENDERMITE;
+			case "ghast":
+				return EntityType.GHAST;
+			case "giant":
+				return EntityType.GIANT;
+			case "guardian":
+				return EntityType.GUARDIAN;
+			case "husk":
+				return EntityType.HUSK;
+			case "illusioner":
+				return EntityType.ILLUSIONER;
+			case "iron_golem":
+				return EntityType.IRON_GOLEM;
+			case "llama":
+				return EntityType.LLAMA;
+			case "magma_cube":
+				return EntityType.MAGMA_CUBE;
+			case "zombie_pigman":
+			case "pig_zombie":
+				return EntityType.PIG_ZOMBIE;
+			case "shulker":
+				return EntityType.SHULKER;
+			case "silverfish":
+				return EntityType.SILVERFISH;
+			case "skeleton":
+				return EntityType.SKELETON;
+			case "slime":
+				return EntityType.SLIME;
+			case "spider":
+				return EntityType.SPIDER;
+			case "stray":
+				return EntityType.STRAY;
+			case "vex":
+				return EntityType.VEX;
+			case "vindicator":
+				return EntityType.VINDICATOR;
+			case "witch":
+				return EntityType.WITCH;
+			case "wither":
+				return EntityType.WITHER;
+			case "wither_skeleton":
+				return EntityType.WITHER_SKELETON;
+			default:
+				return EntityType.ZOMBIE;
+		}
 	}
 	
 	public static ItemStack loreItem(ItemStack i, List<String> lore) {

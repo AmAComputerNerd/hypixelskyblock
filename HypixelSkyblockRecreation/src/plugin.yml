@@ -5,8 +5,9 @@ main: org.hypixelskyblockrecreation.simplyamazing.Main
 description: An attempt at a Hypixel SkyBlock recreation.
 
 commands:
+   item:
+      aliases: [i]
+      description: Get a SkyBlock item!
    skyblockmenu:
       aliases: [sbm]
       description: Opens the SkyBlock menu!
-   gimme:
-      description: Gives the SB Menu item!

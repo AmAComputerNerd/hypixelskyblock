@@ -11,6 +11,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -19,13 +20,13 @@ import org.hypixelskyblockrecreation.simplyamazing.Helpers.ChatUtils;
 import org.hypixelskyblockrecreation.simplyamazing.Helpers.ItemHelper;
 
 public abstract class SkyBlockItem {
-	private Material material;
-	private String name;
+	protected Material material;
+	protected String name;
 	private String description;
-	private Rarity rarity;
+	protected Rarity rarity;
 	private Type type;
-	private int uuid;
-	private boolean stackable;
+	protected int uuid;
+	protected boolean stackable;
 	private boolean oneTimeUse;
 	private boolean noShow;
 	private List<SBAbility> abilities;
@@ -43,6 +44,7 @@ public abstract class SkyBlockItem {
 		this.oneTimeUse = oneTimeUse;
 		this.abilities = abilities;
 		this.craftingRecipe = craftingRecipe;
+		Main.getInstance().getLogger().info("   -> Loaded an item with an id of '" + String.valueOf(this.uuid) + "' - named '" + this.name + "'.");
 	}
 	
 	public SkyBlockItem(final Material material, final String name, final String description, final Rarity rarity, final Type type, final boolean stackable, final boolean oneTimeUse, final List<SBAbility> abilities, final CustomRecipe craftingRecipe) {
@@ -57,6 +59,7 @@ public abstract class SkyBlockItem {
 		this.oneTimeUse = oneTimeUse;
 		this.abilities = abilities;
 		this.craftingRecipe = craftingRecipe;
+		Main.getInstance().getLogger().info("   -> Loaded an item with an id of '" + String.valueOf(this.uuid) + "' - named '" + this.name + "'.");
 	}
 	
 	public boolean compare(final ItemStack other) {
@@ -74,11 +77,10 @@ public abstract class SkyBlockItem {
 		if(!this.stackable) {
 			item = ItemHelper.setNBTValue(item, "UUID", java.util.UUID.randomUUID().toString());
 		}
-		Main.getInstance().getLogger().info("   -> Loaded an item with an id of '" + String.valueOf(this.uuid) + "' - named '" + this.name + "'.");
 		return item;
 	}
 	
-	private List<String> getLore(final ItemStack item) {
+	protected List<String> getLore(final ItemStack item) {
 		final List<String> lore = new ArrayList<String>();
 		lore.addAll(ItemHelper.stringToLore(this.description, 35, ChatColor.GRAY));
 		lore.add("");
@@ -127,6 +129,8 @@ public abstract class SkyBlockItem {
 	public abstract boolean middleClickAction(final Player p0, final ItemStack p1);
 	
 	public abstract boolean hitEntityAction(final Player p0, final EntityDamageByEntityEvent p1, final Entity p2, final ItemStack p3);
+	
+	public abstract boolean killEntityAction(final Player p0, final EntityDeathEvent p1, final Entity p2, final ItemStack p3);
 	
 	public abstract boolean breakBlockAction(final Player p0, final BlockBreakEvent p1, final Block p2, final ItemStack p3);
 	
