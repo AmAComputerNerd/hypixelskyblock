@@ -5,9 +5,13 @@ main: org.hypixelskyblockrecreation.simplyamazing.Main
 description: An attempt at a Hypixel SkyBlock recreation.
 
 commands:
+   coins:
+      description: Commands related to coins!
    item:
       aliases: [i]
       description: Get a SkyBlock item!
+   skilltest:
+      description: Test command!
    skyblockmenu:
       aliases: [sbm]
       description: Opens the SkyBlock menu!

@@ -31,7 +31,7 @@ public class ember_rod extends SkyBlockItem {
 		Fireball thrown = p.launchProjectile(Fireball.class);
 		Vector v = p.getEyeLocation().getDirection().multiply(2.0);
 		thrown.setVelocity(v);
-		thrown.setYield(1);
+		thrown.setYield(0);
 		thrown.setIsIncendiary(true);
 		thrown.setFireTicks(0);
 		thrown.setShooter(p);

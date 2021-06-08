@@ -13,6 +13,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
+import org.hypixelskyblockrecreation.simplyamazing.Helpers.ChatUtils;
 import org.hypixelskyblockrecreation.simplyamazing.Items.CustomRecipe;
 import org.hypixelskyblockrecreation.simplyamazing.Items.Rarity;
 import org.hypixelskyblockrecreation.simplyamazing.Items.SBAbility;
@@ -73,6 +74,7 @@ public class coco_chopper extends SkyBlockItem {
 		
 		if(p2.getType() == Material.LOG || p2.getType() == Material.LOG_2) {
 			p1.setCancelled(true);
+			p0.sendMessage(ChatUtils.chat("&cThe Coco Chopper cannot break trees!"));
 		}
 		return false;
 	}

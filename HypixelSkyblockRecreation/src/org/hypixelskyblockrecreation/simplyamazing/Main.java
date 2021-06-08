@@ -1,5 +1,7 @@
 package org.hypixelskyblockrecreation.simplyamazing;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -7,17 +9,23 @@ import java.util.Map;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 import org.hypixelskyblockrecreation.simplyamazing.Main;
+import org.hypixelskyblockrecreation.simplyamazing.Commands.Coins;
 import org.hypixelskyblockrecreation.simplyamazing.Commands.Item;
+import org.hypixelskyblockrecreation.simplyamazing.Commands.SkillTest;
 import org.hypixelskyblockrecreation.simplyamazing.Commands.SkyBlockMenu;
 import org.hypixelskyblockrecreation.simplyamazing.Helpers.AbilityInit;
 import org.hypixelskyblockrecreation.simplyamazing.Helpers.ChatUtils;
 import org.hypixelskyblockrecreation.simplyamazing.Helpers.ItemHelper;
+import org.hypixelskyblockrecreation.simplyamazing.Helpers.JoinLeaveListener;
 import org.hypixelskyblockrecreation.simplyamazing.Helpers.RegisterItems;
 import org.hypixelskyblockrecreation.simplyamazing.Items.Rarity;
 import org.hypixelskyblockrecreation.simplyamazing.Items.SBAbility;
@@ -31,6 +39,9 @@ import de.tr7zw.nbtinjector.NBTInjector;
 
 public class Main extends JavaPlugin {
 	private static Main inst;
+	private static FileConfiguration coins;
+	private static FileConfiguration skills;
+	private static FileConfiguration stats;
 	private static BukkitTask taskId;
 	public static ItemStack sbMenu;
 	private static Map<String, SkyBlockItem> items = new HashMap<String, SkyBlockItem>();
@@ -42,11 +53,15 @@ public class Main extends JavaPlugin {
 	public void onEnable() {
 		inst = this;
 		try {
+			createConfigFiles();
 			NBTInjector.inject();
 			new Item(this);
+			new Coins(this);
+			new SkillTest(this);
 			new SkyBlockMenu(this);
 			new MenuClickListener(this);
 			new AbilityInit(this);
+			new JoinLeaveListener(this);
 			// Put new items
 			putItem("null", new not_found(Material.BARRIER, "null", "&cERROR: SkyBlockItem not found!", Rarity.NONE, Type.NONE, false, false, new ArrayList<SBAbility>(), null));
 			RegisterItems.registerSkyBlockItems();
@@ -86,6 +101,58 @@ public class Main extends JavaPlugin {
 	
 	public static Main getInstance() {
 		return inst;
+	}
+	
+	public static FileConfiguration getCoinsFile() {
+		return Main.coins;
+	}
+	
+	public static FileConfiguration getSkillsFile() {
+		return Main.skills;
+	}
+	
+	public static FileConfiguration getStatsFile() {
+		return Main.stats;
+	}
+	
+	private void createConfigFiles() {
+		File coinsConfigFile = new File(getDataFolder(), "coins.yml");
+		File skillsConfigFile = new File(getDataFolder(), "skills.yml");
+		File statsConfigFile = new File(getDataFolder(), "stats.yml");
+		if(!coinsConfigFile.exists()) {
+			coinsConfigFile.getParentFile().mkdirs();
+			saveResource("coins.yml", false);
+		}
+		if(!skillsConfigFile.exists()) {
+			skillsConfigFile.getParentFile().mkdirs();
+			saveResource("skills.yml", false);
+		}
+		if(!statsConfigFile.exists()) {
+			statsConfigFile.getParentFile().mkdirs();
+			saveResource("stats.yml", false);
+		}
+		
+		coins = new YamlConfiguration();
+		try {
+			coins.load(coinsConfigFile);
+		} catch(IOException | InvalidConfigurationException e) {
+			getLogger().severe("Coins.yml file could not be loaded! The error is being printed below:");
+			e.printStackTrace();
+		}
+		skills = new YamlConfiguration();
+		try {
+			skills.load(skillsConfigFile);
+		} catch(IOException | InvalidConfigurationException e) {
+			getLogger().severe("Skills.yml file could not be loaded! The error is being printed below:");
+			e.printStackTrace();
+		}
+		stats = new YamlConfiguration();
+		try {
+			stats.load(statsConfigFile);
+		} catch(IOException | InvalidConfigurationException e) {
+			getLogger().severe("Stats.yml file could not be loaded! The error is being printed below:");
+			e.printStackTrace();
+		}
 	}
 	
 	public static SkyBlockItem getItem(final String key) {
