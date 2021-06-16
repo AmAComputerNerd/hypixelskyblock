@@ -1,5 +1,8 @@
 package org.hypixelskyblockrecreation.simplyamazing.Commands;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.apache.logging.log4j.core.util.Integers;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -8,18 +11,18 @@ import org.bukkit.entity.Player;
 import org.hypixelskyblockrecreation.simplyamazing.Main;
 import org.hypixelskyblockrecreation.simplyamazing.Helpers.ChatUtils;
 import org.hypixelskyblockrecreation.simplyamazing.Helpers.Utilities;
+import org.hypixelskyblockrecreation.simplyamazing.Helpers.Types.SkyBlockCommand;
 
-public class SkillTest implements CommandExecutor {
+public class SkillTest extends SkyBlockCommand {
 	
 	private Main plugin;
 	
-	public SkillTest(Main plugin) {
-		this.plugin = plugin;
-		plugin.getCommand("skilltest").setExecutor(this);
+	public SkillTest() {
+		super("skilltest", "/skilltest (farming/mining/combat/foraging/fishing)", null, false);
 	}
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+	public boolean execute(CommandSender sender, String[] args) {
 		Player p = (Player) sender;
 		
 		if(args.length == 0) {
@@ -45,6 +48,14 @@ public class SkillTest implements CommandExecutor {
 				break;
 		}
 		return false;
+	}
+
+	@Override
+	public List<String> tabComplete(CommandSender sender, String[] args) {
+		if(args.length == 0) {
+			return Arrays.asList("farming", "mining", "combat", "foraging", "fishing");
+		}
+		return null;
 	}
 
 }

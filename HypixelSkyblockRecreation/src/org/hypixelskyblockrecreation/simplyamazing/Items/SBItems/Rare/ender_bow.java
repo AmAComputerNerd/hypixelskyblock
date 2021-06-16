@@ -1,5 +1,6 @@
 package org.hypixelskyblockrecreation.simplyamazing.Items.SBItems.Rare;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.bukkit.Location;
@@ -16,16 +17,22 @@ import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
+import org.hypixelskyblockrecreation.simplyamazing.Helpers.ChatUtils;
+import org.hypixelskyblockrecreation.simplyamazing.Helpers.Types.Stat;
+import org.hypixelskyblockrecreation.simplyamazing.Helpers.Types.StatType;
 import org.hypixelskyblockrecreation.simplyamazing.Items.CustomRecipe;
 import org.hypixelskyblockrecreation.simplyamazing.Items.Rarity;
 import org.hypixelskyblockrecreation.simplyamazing.Items.SBAbility;
-import org.hypixelskyblockrecreation.simplyamazing.Items.SkyBlockItem;
 import org.hypixelskyblockrecreation.simplyamazing.Items.Type;
+import org.hypixelskyblockrecreation.simplyamazing.Items.SBItems.SkyBlockItem;
+
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
 
 public class ender_bow extends SkyBlockItem {
 
 	public ender_bow(Material material, String name, String description, Rarity rarity, Type type, boolean stackable, boolean oneTimeUse, List<SBAbility> abilities, CustomRecipe craftingRecipe) {
-		super(material, name, description, rarity, type, stackable, oneTimeUse, abilities, craftingRecipe);
+		super(material, "ENDER_BOW", name, description, rarity, type, stackable, oneTimeUse, abilities, Collections.singletonList(new Stat(StatType.DAMAGE, 60, false)), craftingRecipe);
 	}
 	
 	private void shootEnderpearl(Player p) {
@@ -36,10 +43,11 @@ public class ender_bow extends SkyBlockItem {
 		thrown.setGravity(true);
 		
 		thrown.setCustomName("EnderBowEnderpearl");
+		p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(ChatUtils.chat("&b-0 Mana (&6Ender Warp&b)")));
 	}
 	
+	@SuppressWarnings("deprecation")
 	public boolean onEnderpearlLand(Player p0, ProjectileHitEvent p1, ItemStack p2) {
-		Location loc = p1.getEntity().getLocation();
 		List<Entity> en = p0.getNearbyEntities(8.0, 4.0, 8.0);
 		for(Entity e : en) {
 			if(e instanceof LivingEntity) {

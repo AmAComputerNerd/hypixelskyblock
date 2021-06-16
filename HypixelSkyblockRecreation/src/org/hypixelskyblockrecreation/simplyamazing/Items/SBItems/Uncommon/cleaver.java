@@ -1,5 +1,6 @@
 package org.hypixelskyblockrecreation.simplyamazing.Items.SBItems.Uncommon;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.Material;
@@ -12,16 +13,18 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
+import org.hypixelskyblockrecreation.simplyamazing.Helpers.Types.Stat;
+import org.hypixelskyblockrecreation.simplyamazing.Helpers.Types.StatType;
 import org.hypixelskyblockrecreation.simplyamazing.Items.CustomRecipe;
 import org.hypixelskyblockrecreation.simplyamazing.Items.Rarity;
 import org.hypixelskyblockrecreation.simplyamazing.Items.SBAbility;
-import org.hypixelskyblockrecreation.simplyamazing.Items.SkyBlockItem;
 import org.hypixelskyblockrecreation.simplyamazing.Items.Type;
+import org.hypixelskyblockrecreation.simplyamazing.Items.SBItems.SkyBlockItem;
 
 public class cleaver extends SkyBlockItem {
 
 	public cleaver(Material material, String name, String description, Rarity rarity, Type type, boolean stackable, boolean oneTimeUse, List<SBAbility> abilities, CustomRecipe craftingRecipe) {
-		super(material, name, description, rarity, type, stackable, oneTimeUse, abilities, craftingRecipe);
+		super(material, "CLEAVER", name, description, rarity, type, stackable, oneTimeUse, abilities, Arrays.asList(new Stat(StatType.DAMAGE, 40, false), new Stat(StatType.STRENGTH, 10, false)), craftingRecipe);
 	}
 
 	@Override

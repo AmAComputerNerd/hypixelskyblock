@@ -10,6 +10,14 @@ commands:
    item:
       aliases: [i]
       description: Get a SkyBlock item!
+   material:
+      aliases: [m]
+      description: Get a SkyBlock material!
+   sbgiveall:
+      aliases: [giveall]
+      description: Give yourself every SkyBlock item!
+   sbskills:
+      description: Commands related to skills!
    skilltest:
       description: Test command!
    skyblockmenu:

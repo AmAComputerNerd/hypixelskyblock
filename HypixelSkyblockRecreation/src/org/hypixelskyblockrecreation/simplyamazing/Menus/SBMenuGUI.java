@@ -3,17 +3,13 @@ package org.hypixelskyblockrecreation.simplyamazing.Menus;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.UUID;
-
 import org.apache.logging.log4j.core.util.Integers;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
-import org.bukkit.material.SpawnEgg;
 import org.hypixelskyblockrecreation.simplyamazing.Main;
 import org.hypixelskyblockrecreation.simplyamazing.Helpers.ChatUtils;
 import org.hypixelskyblockrecreation.simplyamazing.Helpers.Inventories;
@@ -21,7 +17,7 @@ import org.hypixelskyblockrecreation.simplyamazing.Helpers.SkullHelper;
 import org.hypixelskyblockrecreation.simplyamazing.Helpers.Utilities;
 
 public class SBMenuGUI {
-	private static Main plugin;
+	private Main plugin;
 		
 	public SBMenuGUI(Main plugin) {
 		this.plugin = plugin;

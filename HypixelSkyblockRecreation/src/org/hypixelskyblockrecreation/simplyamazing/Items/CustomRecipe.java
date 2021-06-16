@@ -2,9 +2,7 @@ package org.hypixelskyblockrecreation.simplyamazing.Items;
 
 import java.util.List;
 
-import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
-import org.hypixelskyblockrecreation.simplyamazing.Helpers.ItemHelper;
 
 // The methods and values in this file are taken from the UberItems plugin.
 // All thanks goes to them.

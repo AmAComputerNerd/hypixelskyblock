@@ -2,6 +2,8 @@ package org.hypixelskyblockrecreation.simplyamazing.Helpers;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 import org.apache.logging.log4j.core.util.Integers;
 import org.bukkit.Bukkit;
@@ -16,11 +18,26 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitTask;
 import org.hypixelskyblockrecreation.simplyamazing.Main;
+import org.hypixelskyblockrecreation.simplyamazing.Helpers.Types.SkyBlockCommand;
 
 public class Utilities {
-	private static BukkitTask coins;
-	private static BukkitTask skills;
-	private static BukkitTask stats;
+	public static boolean itemLoadDebug = true;
+	private static BukkitTask task;
+	
+	public static void setItemCreationDebug(boolean value) {
+		itemLoadDebug = value;
+	}
+	
+	public static String capitalizeWord(String str){  
+	    String words[] = str.split("\\s");  
+	    String capitalizeWord = "";  
+	    for(String w : words){  
+	        String first = w.substring(0, 1);  
+	        String afterfirst = w.substring(1);  
+	        capitalizeWord += first.toUpperCase() + afterfirst + " ";
+	    }  
+	    return capitalizeWord.trim();  
+	}
 	
 	public static boolean enforcePermissions(Player p, String perm) {
 		if(p.hasPermission(perm)) {
@@ -241,50 +258,10 @@ public class Utilities {
 		stats.set(p.getUniqueId().toString() + ".fortune.foraging.base", 0);
 		stats.set(p.getUniqueId().toString() + ".fortune.foraging.bonus", 0);
 		
-		try {
-			coins.save(new File(Main.getInstance().getDataFolder(), "coins.yml"));
-		} catch (IOException e) {
-			Main.getInstance().getLogger().warning("Failed to save the coins.yml file for " + p.getName() + ". Loop started.");
-			Utilities.coins = Bukkit.getScheduler().runTaskTimer(Main.getInstance(), new Runnable() {
-				@Override
-				public void run() {
-					try {
-						coins.save(new File(Main.getInstance().getDataFolder(), "coins.yml"));
-						Utilities.coins.cancel();
-					} catch(IOException e) {}
-				}
-			}, 40L, 40L);
-		}
+		saveFile(coins, new File(Main.getInstance().getDataFolder(), "coins.yml"), p);
+		saveFile(skills, new File(Main.getInstance().getDataFolder(), "skills.yml"), p);
+		saveFile(stats, new File(Main.getInstance().getDataFolder(), "stats.yml"), p);
 		
-		try {
-			skills.save(new File(Main.getInstance().getDataFolder(), "skills.yml"));
-		} catch (IOException e) {
-			Main.getInstance().getLogger().warning("Failed to save the skills.yml file for " + p.getName() + ". Loop started.");
-			Utilities.skills = Bukkit.getScheduler().runTaskTimer(Main.getInstance(), new Runnable() {
-				@Override
-				public void run() {
-					try {
-						skills.save(new File(Main.getInstance().getDataFolder(), "skills.yml"));
-						Utilities.skills.cancel();
-					} catch(IOException e) {}
-				}
-			}, 40L, 40L);
-		}
-		
-		try {
-			stats.save(new File(Main.getInstance().getDataFolder(), "stats.yml"));
-		} catch (IOException e) {
-			Main.getInstance().getLogger().warning("Failed to save the stats.yml file for " + p.getName() + ". Loop started.");
-			Utilities.stats = Bukkit.getScheduler().runTaskTimer(Main.getInstance(), new Runnable() {
-				@Override
-				public void run() {
-					try {
-						stats.save(new File(Main.getInstance().getDataFolder(), "stats.yml"));
-						Utilities.stats.cancel();
-					} catch(IOException e) {}
-				}
-			}, 40L, 40L);
-		}
 	}
 	
 	public static int getCoins(Player p, String loc) {
@@ -335,6 +312,44 @@ public class Utilities {
 				return String.valueOf(skills.get(p.getUniqueId().toString() + ".taming." + value));
 			default:
 				return null;
+		}
+	}
+	
+	public static void saveFile(FileConfiguration fc, File f, Player p) {
+		try {
+			fc.save(f);
+		} catch (IOException e) {
+			Main.getInstance().getLogger().warning("Failed to save the " + f.getName() + ".yml file for " + p.getName() + ". Loop started.");
+			Utilities.task = Bukkit.getScheduler().runTaskTimer(Main.getInstance(), new Runnable() {
+				@Override
+				public void run() {
+					try {
+						fc.save(f);
+						Utilities.task.cancel();
+					} catch(IOException e) {}
+				}
+			}, 40L, 40L);
+		}
+	}
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public static void sendUsage(String cmd, Player p) {
+		try {
+			String usage = Commands.getCommandUsage(cmd);
+			p.sendMessage(ChatUtils.chat(usage));
+		} catch(IOException | ArrayIndexOutOfBoundsException e) {
+			p.sendMessage(ChatUtils.chat("&cUsage: &4Unregistered command &7(Please restart your server)"));
+		}
+		
+	}
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public static void sendUsage(String cmd, CommandSender p) {
+		try {
+			String usage = Commands.getCommandUsage(cmd);
+			p.sendMessage(ChatUtils.chat(usage));
+		} catch(IOException | ArrayIndexOutOfBoundsException e) {
+			p.sendMessage(ChatUtils.chat("&cUsage: &4Unregistered command &7(Please restart your server)"));
 		}
 	}
 }

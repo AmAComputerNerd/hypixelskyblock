@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -14,7 +15,6 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 import org.hypixelskyblockrecreation.simplyamazing.Main;
@@ -22,18 +22,19 @@ import org.hypixelskyblockrecreation.simplyamazing.Commands.Coins;
 import org.hypixelskyblockrecreation.simplyamazing.Commands.Item;
 import org.hypixelskyblockrecreation.simplyamazing.Commands.SkillTest;
 import org.hypixelskyblockrecreation.simplyamazing.Commands.SkyBlockMenu;
-import org.hypixelskyblockrecreation.simplyamazing.Helpers.AbilityInit;
 import org.hypixelskyblockrecreation.simplyamazing.Helpers.ChatUtils;
 import org.hypixelskyblockrecreation.simplyamazing.Helpers.ItemHelper;
-import org.hypixelskyblockrecreation.simplyamazing.Helpers.JoinLeaveListener;
 import org.hypixelskyblockrecreation.simplyamazing.Helpers.RegisterItems;
+import org.hypixelskyblockrecreation.simplyamazing.Helpers.Types.SkyBlockCommand;
 import org.hypixelskyblockrecreation.simplyamazing.Items.Rarity;
 import org.hypixelskyblockrecreation.simplyamazing.Items.SBAbility;
-import org.hypixelskyblockrecreation.simplyamazing.Items.SkyBlockItem;
-import org.hypixelskyblockrecreation.simplyamazing.Items.SkyBlockMaterial;
 import org.hypixelskyblockrecreation.simplyamazing.Items.Type;
-import org.hypixelskyblockrecreation.simplyamazing.Items.SBItems.not_found;
-import org.hypixelskyblockrecreation.simplyamazing.Menus.MenuClickListener;
+import org.hypixelskyblockrecreation.simplyamazing.Items.SBItems.SkyBlockItem;
+import org.hypixelskyblockrecreation.simplyamazing.Items.SBItems.SkyBlockMaterial;
+import org.hypixelskyblockrecreation.simplyamazing.Items.SBItems.Other.not_found;
+import org.hypixelskyblockrecreation.simplyamazing.Listeners.ItemAbilityListener;
+import org.hypixelskyblockrecreation.simplyamazing.Listeners.JoinLeaveListener;
+import org.hypixelskyblockrecreation.simplyamazing.Listeners.MenuClickListener;
 
 import de.tr7zw.nbtinjector.NBTInjector;
 
@@ -42,12 +43,11 @@ public class Main extends JavaPlugin {
 	private static FileConfiguration coins;
 	private static FileConfiguration skills;
 	private static FileConfiguration stats;
-	private static BukkitTask taskId;
+	private static BukkitTask autoSbMenu;
+	private static BukkitTask checkPlayers;
 	public static ItemStack sbMenu;
 	private static Map<String, SkyBlockItem> items = new HashMap<String, SkyBlockItem>();
-	private static Map<Integer, SkyBlockItem> itemIDs = new HashMap<Integer, SkyBlockItem>();
     private static Map<String, SkyBlockMaterial> materials = new HashMap<String, SkyBlockMaterial>();
-    private static Map<Integer, SkyBlockMaterial> materialIDs = new HashMap<Integer, SkyBlockMaterial>();
 	
 	@Override
 	public void onEnable() {
@@ -55,19 +55,16 @@ public class Main extends JavaPlugin {
 		try {
 			createConfigFiles();
 			NBTInjector.inject();
-			new Item(this);
-			new Coins(this);
-			new SkillTest(this);
-			new SkyBlockMenu(this);
+			SkyBlockCommand.registerCommands(this);
 			new MenuClickListener(this);
-			new AbilityInit(this);
+			new ItemAbilityListener(this);
 			new JoinLeaveListener(this);
 			// Put new items
 			putItem("null", new not_found(Material.BARRIER, "null", "&cERROR: SkyBlockItem not found!", Rarity.NONE, Type.NONE, false, false, new ArrayList<SBAbility>(), null));
 			RegisterItems.registerSkyBlockItems();
 			// Start task for checking the SBMenu location
 			sbMenu = getItem("skyblock_menu").createItem(1);
-			taskId = Bukkit.getScheduler().runTaskTimer(this, new Runnable() {
+			autoSbMenu = Bukkit.getScheduler().runTaskTimer(this, new Runnable() {
 				@Override
 				public void run() {
 					for(Player p : Bukkit.getOnlinePlayers()) {
@@ -78,14 +75,31 @@ public class Main extends JavaPlugin {
 						if(!(p.getInventory().getItem(8).equals(sbMenu))) {
 							ItemStack toAdd = p.getInventory().getItem(8);
 							p.getInventory().setItem(8, sbMenu);
-							if(ItemHelper.getNBTValue(toAdd, "SbUUID") != null) {
-								if(ItemHelper.getNBTValue(toAdd, "SbUUID").equals("128821747")) {
+							if(ItemHelper.getNBTValueFromCompound(toAdd, "ExtraAttributes", "id") != null) {
+								if(ItemHelper.getNBTValueFromCompound(toAdd, "ExtraAttributes", "id").equals("SKYBLOCK_MENU")) {
 									return;
 								}
 							}
 							p.getInventory().addItem(toAdd);
 							return;
 						}
+					}
+				}
+			}, 40L, 10L);
+			checkPlayers = Bukkit.getScheduler().runTaskTimer(this, new Runnable() {
+				@SuppressWarnings("unused")
+				@Override
+				public void run() {
+					int counter = 0;
+					for(Player p : Bukkit.getOnlinePlayers()) {
+						counter = counter++;
+					}
+					if(counter > 5) {
+						for(Player p : Bukkit.getOnlinePlayers()) {
+							p.sendMessage(ChatUtils.chat("&6[HypixelSkyBlock] &7For legal reasons, this plugin has been set to &cauto-disable&7 when more than &a5 players&7 are online. The plugin will be &cdisabled&7 until the next reboot."));
+						}
+						getLogger().severe("Detected more than 5 players online at once! The plugin has auto-disabled until the next reboot.");
+						disable();
 					}
 				}
 			}, 40L, 10L);
@@ -96,7 +110,13 @@ public class Main extends JavaPlugin {
 	
 	@Override
 	public void onDisable() {
-		taskId.cancel();
+		autoSbMenu.cancel();
+		checkPlayers.cancel();
+	}
+	
+	// Used to disable the plugin.
+	private void disable() {
+		this.getPluginLoader().disablePlugin(this);
 	}
 	
 	public static Main getInstance() {
@@ -163,12 +183,16 @@ public class Main extends JavaPlugin {
 		return i;
 	}
 	
-	public static SkyBlockItem getItemFromID(final int id) {
-		final SkyBlockItem i = Main.itemIDs.get(id);
-		if(i == null) {
-			return Main.items.get("null");
+	public static String getItemNameFromItem(final SkyBlockItem sbi) {
+		if(Main.items.containsValue(sbi)) {
+			for(Entry<String, SkyBlockItem> e : Main.items.entrySet()) {
+				if(sbi.getUUID() == e.getValue().getUUID()) {
+					return e.getKey();
+				}
+			}
+			return sbi.getDisplayName();
 		}
-		return i;
+		return "UNREGISTERED_ITEM";
 	}
 	
 	public static boolean isValidItem(final String key) {
@@ -194,12 +218,16 @@ public class Main extends JavaPlugin {
 		return m;
 	}
 	
-	public static SkyBlockMaterial getMaterialFromID(final int id) {
-		final SkyBlockMaterial m = Main.materialIDs.get(id);
-		if(m == null) {
-			return null;
+	public static String getItemNameFromMaterial(final SkyBlockMaterial sbm) {
+		if(Main.materials.containsValue(sbm)) {
+			for(Entry<String, SkyBlockMaterial> e : Main.materials.entrySet()) {
+				if(sbm.getUUID() == e.getValue().getUUID()) {
+					return e.getKey();
+				}
+			}
+			return sbm.getName();
 		}
-		return m;
+		return "UNREGISTERED_MATERIAL";
 	}
 	
 	public static boolean isValidMaterial(final String key) {
@@ -219,12 +247,10 @@ public class Main extends JavaPlugin {
 	
 	public static void putItem(final String name, final SkyBlockItem item) {
 		Main.items.put(name, item);
-		Main.itemIDs.put(item.getUUID(), item);
 	}
 	
 	public static void putMaterial(final String name, final SkyBlockMaterial material) {
 		Main.materials.put(name, material);
-		Main.materialIDs.put(material.getUUID(), material);
 	}
 	
 }

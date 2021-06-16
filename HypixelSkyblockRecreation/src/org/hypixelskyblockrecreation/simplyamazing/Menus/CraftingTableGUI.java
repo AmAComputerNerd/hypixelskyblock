@@ -1,11 +1,9 @@
 package org.hypixelskyblockrecreation.simplyamazing.Menus;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;

@@ -8,6 +8,7 @@ public enum Type {
 	AXE,
 	SHOVEL,
 	HOE,
+	ROD,
 	HELMET,
 	CHESTPLATE,
 	LEGGINGS,
@@ -31,6 +32,8 @@ public enum Type {
 				return Type.SHOVEL;
 			case "hoe":
 				return Type.HOE;
+			case "rod":
+				return Type.ROD;
 			case "helmet":
 				return Type.HELMET;
 			case "chestplate":
@@ -43,6 +46,41 @@ public enum Type {
 				return Type.ITEM;
 			default:
 				return Type.NONE;
+		}
+	}
+	
+	public static String toString(Type t) {
+		switch(t) {
+			case AXE:
+				return " AXE";
+			case BOOTS:
+				return " BOOTS";
+			case BOW:
+				return " BOW";
+			case CHESTPLATE:
+				return " CHESTPLATE";
+			case HELMET:
+				return " HELMET";
+			case HOE:
+				return " HOE";
+			case ITEM:
+				return " ITEM";
+			case LEGGINGS:
+				return " LEGGINGS";
+			case NONE:
+				return "";
+			case PICKAXE:
+				return " PICKAXE";
+			case ROD:
+				return " FISHING ROD";
+			case SHIELD:
+				return " SHIELD";
+			case SHOVEL:
+				return " SHOVEL";
+			case SWORD:
+				return " SWORD";
+			default:
+				return "";
 		}
 	}
 }

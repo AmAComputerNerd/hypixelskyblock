@@ -1,5 +1,6 @@
 package org.hypixelskyblockrecreation.simplyamazing.Items.SBItems.Legendary;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.Location;
@@ -18,11 +19,13 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.hypixelskyblockrecreation.simplyamazing.Helpers.ChatUtils;
+import org.hypixelskyblockrecreation.simplyamazing.Helpers.Types.Stat;
+import org.hypixelskyblockrecreation.simplyamazing.Helpers.Types.StatType;
 import org.hypixelskyblockrecreation.simplyamazing.Items.CustomRecipe;
 import org.hypixelskyblockrecreation.simplyamazing.Items.Rarity;
 import org.hypixelskyblockrecreation.simplyamazing.Items.SBAbility;
-import org.hypixelskyblockrecreation.simplyamazing.Items.SkyBlockItem;
 import org.hypixelskyblockrecreation.simplyamazing.Items.Type;
+import org.hypixelskyblockrecreation.simplyamazing.Items.SBItems.SkyBlockItem;
 
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -31,7 +34,7 @@ public class hyperion_witherimpact extends SkyBlockItem {
 
 	public hyperion_witherimpact(Material material, String name, String description, Rarity rarity, Type type, boolean stackable, boolean oneTimeUse, List<SBAbility> abilities, CustomRecipe craftingRecipe) {
 		// Abilities must be hidden so that we can make the custom Scroll Abilities text
-		super(material, name, description, rarity, type, stackable, oneTimeUse, true, abilities, craftingRecipe);
+		super(material, "HYPERION_WITHERIMPACT", name, description, rarity, type, stackable, oneTimeUse, true, abilities, Arrays.asList(new Stat(StatType.DAMAGE, 260, false), new Stat(StatType.STRENGTH, 150, false), new Stat(StatType.INTELLIGENCE, 350, false), new Stat(StatType.FEROCITY, 30, false)), craftingRecipe);
 	}
 	
 	private boolean teleport(Player p, Location l) {

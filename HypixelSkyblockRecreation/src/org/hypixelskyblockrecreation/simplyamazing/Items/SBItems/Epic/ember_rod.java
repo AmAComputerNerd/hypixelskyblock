@@ -1,5 +1,6 @@
 package org.hypixelskyblockrecreation.simplyamazing.Items.SBItems.Epic;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.Bukkit;
@@ -15,16 +16,22 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 import org.hypixelskyblockrecreation.simplyamazing.Main;
+import org.hypixelskyblockrecreation.simplyamazing.Helpers.ChatUtils;
+import org.hypixelskyblockrecreation.simplyamazing.Helpers.Types.Stat;
+import org.hypixelskyblockrecreation.simplyamazing.Helpers.Types.StatType;
 import org.hypixelskyblockrecreation.simplyamazing.Items.CustomRecipe;
 import org.hypixelskyblockrecreation.simplyamazing.Items.Rarity;
 import org.hypixelskyblockrecreation.simplyamazing.Items.SBAbility;
-import org.hypixelskyblockrecreation.simplyamazing.Items.SkyBlockItem;
 import org.hypixelskyblockrecreation.simplyamazing.Items.Type;
+import org.hypixelskyblockrecreation.simplyamazing.Items.SBItems.SkyBlockItem;
+
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
 
 public class ember_rod extends SkyBlockItem {
 
 	public ember_rod(Material material, String name, String description, Rarity rarity, Type type, boolean stackable, boolean oneTimeUse, List<SBAbility> abilities, CustomRecipe craftingRecipe) {
-		super(material, name, description, rarity, type, stackable, oneTimeUse, abilities, craftingRecipe);
+		super(material, "EMBER_ROD", name, description, rarity, type, stackable, oneTimeUse, abilities, Arrays.asList(new Stat(StatType.DAMAGE, 80, false), new Stat(StatType.STRENGTH, 35, false)), craftingRecipe);
 	}
 	
 	private void shootFireBall(Player p) {
@@ -48,6 +55,7 @@ public class ember_rod extends SkyBlockItem {
 	public boolean rightClickAction(Player p0, ItemStack p1) {
 		final int amount = 3;
 		
+		p0.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(ChatUtils.chat("&b-0 Mana (&6Fire Blast&b)")));
 		shootFireBall(p0);
 		
 		for(int counter = 1; counter < amount; ++counter) {

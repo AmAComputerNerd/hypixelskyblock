@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import org.apache.logging.log4j.core.util.Integers;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -15,12 +14,14 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.hypixelskyblockrecreation.simplyamazing.Main;
+import org.hypixelskyblockrecreation.simplyamazing.Helpers.Types.Attribute;
+import org.hypixelskyblockrecreation.simplyamazing.Helpers.Types.Stat;
 import org.hypixelskyblockrecreation.simplyamazing.Items.Rarity;
-import org.hypixelskyblockrecreation.simplyamazing.Items.SBAbility;
-import org.hypixelskyblockrecreation.simplyamazing.Items.SkyBlockItem;
 import org.hypixelskyblockrecreation.simplyamazing.Items.Type;
-import org.hypixelskyblockrecreation.simplyamazing.Items.SBItems.skyblock_menu;
+import org.hypixelskyblockrecreation.simplyamazing.Items.SBItems.SkyBlockItem;
 
+import de.tr7zw.nbtapi.NBTCompound;
 import de.tr7zw.nbtapi.NBTItem;
 
 public class ItemHelper {
@@ -42,15 +43,91 @@ public class ItemHelper {
 		return null;
 	}
 	
-	public static ItemStack setNBTValue(ItemStack i, String key, String value) {
+	public static String getNBTValueFromCompound(ItemStack i, String compound, String key) {
 		if(i == null) {
 			return null;
 		}
-		if(i.getType().equals(Material.AIR)) {
+		if(i.getType() == Material.AIR) {
 			return null;
 		}
 		NBTItem nbti = new NBTItem(i);
+		NBTCompound comp = nbti.getCompound(compound);
+		if(comp == null) {
+			i = setNBTValueInCompound(i, compound, key, "empty");
+			nbti = new NBTItem(i);
+			comp = nbti.getCompound(compound);
+		}
+		String value = comp.getString(key);
+		return value;
+	}
+	
+	public static ItemStack setNBTValue(ItemStack i, String key, String value) {
+		if(i == null) {
+			Main.getInstance().getLogger().warning("An item didn't have it's NBT value set because it was null.");
+			return i;
+		}
+		if(i.getType().equals(Material.AIR)) {
+			Main.getInstance().getLogger().warning("An item didn't have it's NBT value set because it was AIR.");
+			return i;
+		}
+		NBTItem nbti = new NBTItem(i);
 		nbti.setString(key, value);
+		return nbti.getItem();
+	}
+	
+	public static ItemStack setNBTValueInCompound(ItemStack i, String compound, String key, String value) {
+		if(i == null) {
+			Main.getInstance().getLogger().warning("An item didn't have it's NBT value set because it was null.");
+			return i;
+		}
+		if(i.getType() == Material.AIR) {
+			Main.getInstance().getLogger().warning("An item didn't have it's NBT value set because it was AIR.");
+			return i;
+		}
+		NBTItem nbti = new NBTItem(i);
+		NBTCompound comp = nbti.getCompound(compound);
+		if(comp == null) {
+			nbti.addCompound(compound);
+			comp = nbti.getCompound(compound);
+		}
+		comp.setString(key, value);
+		return nbti.getItem();
+	}
+	
+	public static ItemStack removeNBTValue(ItemStack i, String key) {
+		if(i == null) {
+			Main.getInstance().getLogger().warning("An item didn't have it's NBT value removed because it was null.");
+			return i;
+		}
+		if(i.getType().equals(Material.AIR)) {
+			Main.getInstance().getLogger().warning("An item didn't have it's NBT value removed because it was AIR.");
+			return i;
+		}
+		NBTItem nbti = new NBTItem(i);
+		if(nbti.getString(key) != null) {
+			nbti.removeKey(key);
+		}
+		return nbti.getItem();
+	}
+	
+	public static ItemStack removeNBTValueFromCompound(ItemStack i, String compound, String key) {
+		if(i == null) {
+			Main.getInstance().getLogger().warning("An item didn't have it's NBT value removed because it was null.");
+			return i;
+		}
+		if(i.getType().equals(Material.AIR)) {
+			Main.getInstance().getLogger().warning("An item didn't have it's NBT value removed because it was AIR.");
+			return i;
+		}
+		NBTItem nbti = new NBTItem(i);
+		NBTCompound comp = nbti.getCompound(compound);
+		if(comp == null) {
+			Main.getInstance().getLogger().warning("An item didn't have it's NBT value removed because the compound specified didn't exist.");
+			return i;
+		}
+		if(comp.getString(key) != null) {
+			comp.removeKey(key);
+		}
 		return nbti.getItem();
 	}
 	
@@ -84,6 +161,22 @@ public class ItemHelper {
 		NBTItem nbti = new NBTItem(i);
 		for(Entry<String, String> k : values.entrySet()) {
 			nbti.setString(k.getKey(), k.getValue());
+		}
+		return nbti.getItem();
+	}
+	
+	public static ItemStack removeAllNBTValues(ItemStack i, List<String> keys) {
+		if(i == null) {
+			return null;
+		}
+		if(i.getType().equals(Material.AIR)) {
+			return null;
+		}
+		NBTItem nbti = new NBTItem(i);
+		for(String k : keys) {
+			if(nbti.getString(k) != null) {
+				nbti.removeKey(k);
+			}
 		}
 		return nbti.getItem();
 	}
@@ -134,9 +227,11 @@ public class ItemHelper {
 		if(i.getType().equals(Material.AIR)) {
 			return toReturn;
 		}
-		NBTItem nbti = new NBTItem(i);
-		String value = getNBTValue(i, "EntityResistance");
+		String value = getNBTValueFromCompound(i, "ExtraAttributes", "EntityResistance");
 		if(value == null) {
+			return toReturn;
+		}
+		if(value.equals("empty")) {
 			return toReturn;
 		}
 		List<String> unprocessed = new ArrayList<String>();
@@ -218,10 +313,142 @@ public class ItemHelper {
 		}
 	}
 	
+	public static boolean isReforgable(Type t) {
+		switch(t) {
+			case BOOTS:
+			case BOW:
+			case CHESTPLATE:
+			case HELMET:
+			case HOE:
+			case LEGGINGS:
+			case PICKAXE:
+			case AXE:
+			case ROD:
+			case SHIELD:
+			case SWORD:
+				return true;
+			case ITEM:
+			case NONE:
+			case SHOVEL:
+			default:
+				return false;
+		}
+	}
+	
+	public static Rarity determineRarity(Material m) {
+		List<Material> uncommon = Arrays.asList(Material.CHAINMAIL_HELMET, Material.CHAINMAIL_CHESTPLATE, Material.CHAINMAIL_LEGGINGS, Material.CHAINMAIL_BOOTS, Material.SHIELD, Material.DIAMOND_AXE, Material.DIAMOND_PICKAXE, Material.DIAMOND_SWORD, Material.DIAMOND_SPADE, Material.DIAMOND_HOE, Material.DIAMOND_HELMET, Material.DIAMOND_CHESTPLATE, Material.DIAMOND_LEGGINGS, Material.DIAMOND_BOOTS);
+		List<Material> legendary = Arrays.asList(Material.COMMAND, Material.COMMAND_CHAIN, Material.COMMAND_MINECART, Material.COMMAND_REPEATING, Material.BEDROCK, Material.BARRIER);
+		if(!(uncommon.contains(m)) && !(legendary.contains(m))) {
+			return Rarity.COMMON;
+		}
+		if(uncommon.contains(m)) {
+			return Rarity.UNCOMMON;
+		}
+		if(legendary.contains(m)) {
+			return Rarity.LEGENDARY;
+		}
+		return Rarity.COMMON;
+	}
+	
+	public static Type determineType(Material m) {
+		List<Material> swords = Arrays.asList(Material.WOOD_SWORD, Material.STONE_SWORD, Material.IRON_SWORD, Material.GOLD_SWORD, Material.DIAMOND_SWORD);
+		List<Material> pickaxes = Arrays.asList(Material.WOOD_PICKAXE, Material.STONE_PICKAXE, Material.IRON_PICKAXE, Material.GOLD_PICKAXE, Material.DIAMOND_PICKAXE);
+		List<Material> axes = Arrays.asList(Material.WOOD_AXE, Material.STONE_AXE, Material.IRON_AXE, Material.GOLD_AXE, Material.DIAMOND_AXE);
+		List<Material> shovels = Arrays.asList(Material.WOOD_SPADE, Material.STONE_SPADE, Material.IRON_SPADE, Material.GOLD_SPADE, Material.DIAMOND_SPADE);
+		List<Material> hoes = Arrays.asList(Material.WOOD_HOE, Material.STONE_HOE, Material.IRON_HOE, Material.GOLD_HOE, Material.DIAMOND_HOE);
+		List<Material> helmets = Arrays.asList(Material.LEATHER_HELMET, Material.CHAINMAIL_HELMET, Material.IRON_HELMET, Material.GOLD_HELMET, Material.DIAMOND_HELMET);
+		List<Material> chestplates = Arrays.asList(Material.LEATHER_CHESTPLATE, Material.CHAINMAIL_CHESTPLATE, Material.IRON_CHESTPLATE, Material.GOLD_CHESTPLATE, Material.DIAMOND_CHESTPLATE);
+		List<Material> leggings = Arrays.asList(Material.LEATHER_LEGGINGS, Material.CHAINMAIL_LEGGINGS, Material.IRON_LEGGINGS, Material.GOLD_LEGGINGS, Material.DIAMOND_LEGGINGS);
+		List<Material> boots = Arrays.asList(Material.LEATHER_BOOTS, Material.CHAINMAIL_BOOTS, Material.IRON_BOOTS, Material.GOLD_BOOTS, Material.DIAMOND_BOOTS);
+		if(swords.contains(m)) {
+			return Type.SWORD;
+		} else if(pickaxes.contains(m)) {
+			return Type.PICKAXE;
+		} else if(axes.contains(m)) {
+			return Type.AXE;
+		} else if(shovels.contains(m)) {
+			return Type.SHOVEL;
+		} else if(hoes.contains(m)) {
+			return Type.HOE;
+		} else if(helmets.contains(m)) {
+			return Type.HELMET;
+		} else if(chestplates.contains(m)) {
+			return Type.CHESTPLATE;
+		} else if(leggings.contains(m)) {
+			return Type.LEGGINGS;
+		} else if(boots.contains(m)) {
+			return Type.BOOTS;
+		} else if(m == Material.BOW) {
+			return Type.BOW;
+		} else if(m == Material.SHIELD) {
+			return Type.SHIELD;
+		} else if(m == Material.FISHING_ROD) {
+			return Type.ROD;
+		}
+		return Type.ITEM;
+	}
+	
+	public static String determineTool(Material m) {
+		List<Material> swords = Arrays.asList(Material.WOOD_SWORD, Material.STONE_SWORD, Material.IRON_SWORD, Material.GOLD_SWORD, Material.DIAMOND_SWORD);
+		List<Material> pickaxes = Arrays.asList(Material.WOOD_PICKAXE, Material.STONE_PICKAXE, Material.IRON_PICKAXE, Material.GOLD_PICKAXE, Material.DIAMOND_PICKAXE);
+		List<Material> axes = Arrays.asList(Material.WOOD_AXE, Material.STONE_AXE, Material.IRON_AXE, Material.GOLD_AXE, Material.DIAMOND_AXE);
+		List<Material> shovels = Arrays.asList(Material.WOOD_SPADE, Material.STONE_SPADE, Material.IRON_SPADE, Material.GOLD_SPADE, Material.DIAMOND_SPADE);
+		List<Material> hoes = Arrays.asList(Material.WOOD_HOE, Material.STONE_HOE, Material.IRON_HOE, Material.GOLD_HOE, Material.DIAMOND_HOE);
+		List<Material> helmets = Arrays.asList(Material.LEATHER_HELMET, Material.CHAINMAIL_HELMET, Material.IRON_HELMET, Material.GOLD_HELMET, Material.DIAMOND_HELMET);
+		List<Material> chestplates = Arrays.asList(Material.LEATHER_CHESTPLATE, Material.CHAINMAIL_CHESTPLATE, Material.IRON_CHESTPLATE, Material.GOLD_CHESTPLATE, Material.DIAMOND_CHESTPLATE);
+		List<Material> leggings = Arrays.asList(Material.LEATHER_LEGGINGS, Material.CHAINMAIL_LEGGINGS, Material.IRON_LEGGINGS, Material.GOLD_LEGGINGS, Material.DIAMOND_LEGGINGS);
+		List<Material> boots = Arrays.asList(Material.LEATHER_BOOTS, Material.CHAINMAIL_BOOTS, Material.IRON_BOOTS, Material.GOLD_BOOTS, Material.DIAMOND_BOOTS);
+		if(swords.contains(m)) {
+			return "sword";
+		} else if(pickaxes.contains(m)) {
+			return "pickaxe";
+		} else if(axes.contains(m)) {
+			return "axe";
+		} else if(shovels.contains(m)) {
+			return "shovel";
+		} else if(hoes.contains(m)) {
+			return "hoe";
+		} else if(helmets.contains(m)) {
+			return "helmet";
+		} else if(chestplates.contains(m)) {
+			return "chestplate";
+		} else if(leggings.contains(m)) {
+			return "leggings";
+		} else if(boots.contains(m)) {
+			return "boots";
+		} else if(m == Material.BOW) {
+			return "bow";
+		} else if(m == Material.SHIELD) {
+			return "shield";
+		} else if(m == Material.FISHING_ROD) {
+			return "shield";
+		}
+		return "none";
+	}
+	
 	public static ItemStack loreItem(ItemStack i, List<String> lore) {
-		final ItemMeta meta = i.getItemMeta();
+		ItemMeta meta = i.getItemMeta();
 		meta.setLore(lore);
 		i.setItemMeta(meta);
+		return i;
+	}
+	
+	public static ItemStack applyExtraAttributes(SkyBlockItem sbi, ItemStack i, String id) {
+		NBTItem nbti = new NBTItem(i);
+		nbti.setInteger("Unbreakable", 1);
+		ItemMeta meta = i.getItemMeta();
+		meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE, ItemFlag.HIDE_ATTRIBUTES);
+		i = nbti.getItem();
+		i.setItemMeta(meta);
+		i = setNBTValueInCompound(i, "ExtraAttributes", "hot_potato_count", "0");
+		i = setNBTValueInCompound(i, "ExtraAttributes", "modifier", "none");
+		i = setNBTValueInCompound(i, "ExtraAttributes", "id", id);
+		for(Stat s : sbi.getStats()) {
+			i = s.apply(i);
+		}
+		for(Attribute a : sbi.getAttributes()) {
+			i = a.apply(i, sbi.getType());
+		}
 		return i;
 	}
 

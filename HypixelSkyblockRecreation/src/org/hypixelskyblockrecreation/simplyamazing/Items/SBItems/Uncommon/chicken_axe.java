@@ -1,5 +1,6 @@
 package org.hypixelskyblockrecreation.simplyamazing.Items.SBItems.Uncommon;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Material;
@@ -12,17 +13,17 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
+import org.hypixelskyblockrecreation.simplyamazing.Helpers.Types.Stat;
 import org.hypixelskyblockrecreation.simplyamazing.Items.CustomRecipe;
 import org.hypixelskyblockrecreation.simplyamazing.Items.Rarity;
 import org.hypixelskyblockrecreation.simplyamazing.Items.SBAbility;
-import org.hypixelskyblockrecreation.simplyamazing.Items.SkyBlockItem;
 import org.hypixelskyblockrecreation.simplyamazing.Items.Type;
+import org.hypixelskyblockrecreation.simplyamazing.Items.SBItems.SkyBlockItem;
 
-// Not finished
 public class chicken_axe extends SkyBlockItem {
 
 	public chicken_axe(Material material, String name, String description, Rarity rarity, Type type, boolean stackable, boolean oneTimeUse, List<SBAbility> abilities, CustomRecipe craftingRecipe) {
-		super(material, name, description, rarity, type, stackable, oneTimeUse, abilities, craftingRecipe);
+		super(material, "CHICKEN_AXE", name, description, rarity, type, stackable, oneTimeUse, abilities, new ArrayList<Stat>(), craftingRecipe);
 	}
 
 	@Override
