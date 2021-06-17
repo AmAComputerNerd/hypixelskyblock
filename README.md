@@ -8,15 +8,30 @@
   FOR SETUP:
     - Place the 'HypixelSkyblock.jar' file into the plugins folder of a 1.12.2 server, alongside the dependencies located in the 'dep' folder. Running the command '/skyblockmenu' or '/sbm' will open the menu.
     
-  NOTE:
+  #### NOTE:
   
   This project is for personal use only. Hypixel SkyBlock is the copywrite of Hypixel, and you shall not use this plugin as a method to recreate SkyBlock to steal
-  Hypixel's playerbase. This is a very early development release, and as such the only features right now are the Skills page, which itself still has a lot missing.
-  You are free to make new menus with the code already provided as a starting point. To learn how to do this, refer to the section below and the existing code:
+  Hypixel's playerbase. This is a very early release of my plugin, and as such currently has very limited features and some bugs.
+  You **are** allowed to edit the code to add new items, inventories, command, and listeners, but you are **forbidden** to edit the code of existing commands, listeners and   other files except to register new commands, or register a new item. To learn how to do this, refer to the code and the sections below.
   
   ---------------------------------------------------------------------------------
   
-  **SETTING UP NEW INVENTORIES**
+  ### CREATING NEW ITEMS
+  
+  To make a new SkyBlock item, you must navigate to the Items / SBItems subpackage and create a new class under whatever rarity it is. You should name this class (in lowercase, replacing the spaces with underscores) the name of the item. You can refer to the existing items if you are confused about how to name your item class. Once it is created, you should make sure the class `extends SkyBlockItem`. You should add the missing constructor when prompted to do so, and edit it so it looks like below:
+  
+    public class your_item extends SkyBlockItem {
+        public your_item(Material material, String displayName, String description, Rarity rarity, Type type, boolean stackable, boolean oneTimeUse, List<SBAbility> abilities, CustomRecipe craftingRecipe) {
+          // Notice how I removed the `String sbName` and `List<Stat> stats` from the constructor. Instead, I define it here in the file
+          super(material, "YOUR_ITEM_IN_CAPS", displayName, description, rarity, type, stackable, oneTimeUse, abilities, Arrays.asList(new Stat(StatType.DAMAGE, 200, false), new Stat(StatType.STRENGTH, 100, false)), craftingRecipe);
+        }
+    }
+  
+  Once you have made your constructer, add the missing methods and fill them in as desired - these are the abilities, and they trigger based on certain actions. After this, you need to register your new item. Go to Helpers / RegisterItems.class, and add a new value to the registerSkyBlockItems() method. Refer to the other values for what argument does what. When it's registered, after exporting the plugin, it will now be available to get using the /item command!
+  
+  ---------------------------------------------------------------------------------
+  
+  ### SETTING UP NEW INVENTORIES
   
   To start making a new inventory, you must make a new file that has the following methods:
   
@@ -66,7 +81,7 @@
 
   ---------------------------------------------------------------------------------
 
-  **PERFORMING ACTIONS UPON CLICKING AN ITEM**
+  ### PERFORMING ACTIONS UPON CLICKING AN ITEM
 
   To start using this feature, you must first go to the file titled 'MenuClickListener' and add the following line of code to the end of the last else if():
      
@@ -87,7 +102,7 @@
   
   ---------------------------------------------------------------------------------
 
-  **USING CUSTOM SKULLS**
+  ### USING CUSTOM SKULLS
 
   The code has a helper inside that can be used to make custom skulls. There are a multitude of ways to get a custom head, however. The easiest way is to use a player's name to get their head:
   
