@@ -77,7 +77,7 @@
   Once all your inventory file methods are finished, to open the inventory to a player, simply call the openInventory() method on a Player with the following arguments.
 
     // Assuming your inventory is called file-name...
-    p.openInventory(InventoryBuilder.build(file-name.getTitle(), 6, file-name.getInventoryFormat(p)));
+    p.openInventory(Inventories.build(file-name.getTitle(), 6, file-name.getInventoryFormat(p)));
 
   ---------------------------------------------------------------------------------
 
